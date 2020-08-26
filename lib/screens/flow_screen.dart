@@ -49,16 +49,18 @@ class _FlowScreenState extends State<FlowScreen> {
       _isPlaying = true;
     });
     _timer = Timer.periodic(Duration(seconds: 1), (Timer timer) {
-      setState(() {
-        if (_counter > 0) {
-          _counter--;
-        } else {
-          _timer.cancel();
-          _isPlaying = false;
-          _timeForBreak = !_timeForBreak;
-          _counter = _flowTestTime;
-        }
-      });
+      if (mounted) {
+        setState(() {
+          if (_counter > 0) {
+            _counter--;
+          } else {
+            _timer.cancel();
+            _isPlaying = false;
+            _timeForBreak = !_timeForBreak;
+            _counter = _flowTestTime;
+          }
+        });
+      }
     });
   }
 
@@ -84,15 +86,17 @@ class _FlowScreenState extends State<FlowScreen> {
       _isCoffeePlaying = true;
     });
     _coffeeTimer = Timer.periodic(Duration(seconds: 1), (Timer coffeeTimer) {
-      setState(() {
-        if (_coffeeCounter > 0) {
-          _coffeeCounter--;
-        } else {
-          _coffeeTimer.cancel();
-          _isCoffeePlaying = false;
-          _coffeeCounter = _coffeeTestTime;
-        }
-      });
+      if (mounted) {
+        setState(() {
+          if (_coffeeCounter > 0) {
+            _coffeeCounter--;
+          } else {
+            _coffeeTimer.cancel();
+            _isCoffeePlaying = false;
+            _coffeeCounter = _coffeeTestTime;
+          }
+        });
+      }
     });
   }
 
@@ -126,8 +130,9 @@ class _FlowScreenState extends State<FlowScreen> {
                   width: 240,
                   child: LiquidCircularProgressIndicator(
                     value: doubleConverter(
-                        (_counter.toDouble()) + 1.5, _flowTestTime),
-                    valueColor: AlwaysStoppedAnimation(Colors.blue[300]),
+                        (_counter.toDouble()) + .5, _flowTestTime),
+                    valueColor: AlwaysStoppedAnimation(
+                        Theme.of(context).primaryColorLight),
                     backgroundColor: Colors.transparent,
                     borderColor: Colors.transparent,
                     borderWidth: 0,

@@ -6,6 +6,16 @@ void main() {
   runApp(MyApp());
 }
 
+// Primary Color 3A7BF2
+// Primary Color Light 6A9BF6
+// Accent Color A3BCFE
+// Canvas Color FAFCFF
+// Font Color 010813
+// Light Grey F2F4F7
+// Dark Grey D1D9E0
+// Coffee Color 6D4D3E
+// Coffee Color Light 947060
+
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -13,8 +23,19 @@ class MyApp extends StatelessWidget {
       title: 'Flow Time',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        primarySwatch: Colors.blue,
+        primaryColor: Color(0xff3A7BF2),
+        primaryColorLight: Color(0xff6A9BF6),
+        accentColor: Color(0xffA3BCFE),
+        canvasColor: Color(0xffFAFCFF),
         visualDensity: VisualDensity.adaptivePlatformDensity,
+        textTheme: TextTheme(
+          bodyText2: TextStyle(
+            color: Color(0xff010813),
+          ),
+        ),
+        iconTheme: IconThemeData(
+          color: Color(0xffD1D9E0),
+        ),
       ),
       home: RootPage(),
     );
@@ -41,6 +62,13 @@ class _RootPageState extends State<RootPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       bottomNavigationBar: BottomNavigationBar(
+        elevation: 0,
+        currentIndex: _selectedIndex,
+        selectedItemColor: Theme.of(context).primaryColor,
+        unselectedItemColor: Theme.of(context).iconTheme.color,
+        unselectedIconTheme: IconThemeData(
+          size: 20,
+        ),
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
             icon: Icon(Icons.waves),
@@ -51,8 +79,6 @@ class _RootPageState extends State<RootPage> {
             title: Text('Settings'),
           ),
         ],
-        currentIndex: _selectedIndex,
-        selectedItemColor: Theme.of(context).accentColor,
         onTap: (value) {
           _selectedIndex = value;
           _pageController.animateToPage(
