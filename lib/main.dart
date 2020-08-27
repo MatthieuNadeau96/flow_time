@@ -48,59 +48,10 @@ class RootPage extends StatefulWidget {
 }
 
 class _RootPageState extends State<RootPage> {
-  PageController _pageController = PageController(
-    initialPage: 0,
-  );
-  int _selectedIndex = 0;
-
-  final screens = [
-    FlowScreen(),
-    SettingsScreen(),
-  ];
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      bottomNavigationBar: BottomNavigationBar(
-        elevation: 0,
-        currentIndex: _selectedIndex,
-        selectedItemColor: Theme.of(context).primaryColor,
-        unselectedItemColor: Theme.of(context).iconTheme.color,
-        unselectedIconTheme: IconThemeData(
-          size: 20,
-        ),
-        items: const <BottomNavigationBarItem>[
-          BottomNavigationBarItem(
-            icon: Icon(Icons.waves),
-            title: Text('Flow'),
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.settings),
-            title: Text('Settings'),
-          ),
-        ],
-        onTap: (value) {
-          _selectedIndex = value;
-          _pageController.animateToPage(
-            value,
-            duration: Duration(milliseconds: 500),
-            curve: Curves.ease,
-          );
-          setState(() {});
-        },
-      ),
-      body: PageView(
-        controller: _pageController,
-        onPageChanged: (page) {
-          setState(() {
-            _selectedIndex = page;
-          });
-        },
-        children: [
-          screens[0],
-          screens[1],
-        ],
-      ),
+      body: FlowScreen(),
     );
   }
 }

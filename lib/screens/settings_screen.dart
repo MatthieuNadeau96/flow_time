@@ -14,15 +14,26 @@ class _SettingsScreenState extends State<SettingsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+          backgroundColor: Theme.of(context).canvasColor,
+          elevation: 0,
+          leading: GestureDetector(
+            child: Icon(
+              Icons.arrow_back_rounded,
+              size: 30,
+              color:
+                  Theme.of(context).textTheme.bodyText2.color.withOpacity(0.75),
+            ),
+            onTap: () {
+              Navigator.pop(context);
+            },
+          )),
       body: SafeArea(
         child: Container(
           margin: const EdgeInsets.symmetric(horizontal: 30),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Container(
-                height: 50,
-              ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
