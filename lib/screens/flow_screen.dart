@@ -1,5 +1,7 @@
 import 'dart:async';
 
+import 'package:audioplayers/audio_cache.dart';
+import 'package:audioplayers/audioplayers.dart';
 import 'package:flow_time/screens/settings_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -11,9 +13,11 @@ class FlowScreen extends StatefulWidget {
   _FlowScreenState createState() => _FlowScreenState();
 }
 
-class _FlowScreenState extends State<FlowScreen> {
+class _FlowScreenState extends State<FlowScreen> with WidgetsBindingObserver {
   FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
       FlutterLocalNotificationsPlugin();
+  AudioPlayer audioPlayer = AudioPlayer();
+  static AudioCache player = AudioCache();
 
   int _counter = 10;
   int _flowDuration = 5400;
@@ -29,6 +33,8 @@ class _FlowScreenState extends State<FlowScreen> {
   bool _isCoffeePlaying;
   Timer _timer;
   Timer _coffeeTimer;
+
+  bool _lifeCyclePaused = false;
 
   var initializationSettingsAndroid;
   var initializationSettingsIOS;
@@ -114,6 +120,7 @@ class _FlowScreenState extends State<FlowScreen> {
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addObserver(this);
     _isPlaying = false;
     _timeForBreak = false;
     _isCoffeePlaying = false;
@@ -124,6 +131,23 @@ class _FlowScreenState extends State<FlowScreen> {
         initializationSettingsAndroid, initializationSettingsIOS);
     flutterLocalNotificationsPlugin.initialize(initializationSettings,
         onSelectNotification: onSelectNotification);
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    print(state);
+    setState(() {
+      state == AppLifecycleState.paused
+          ? _lifeCyclePaused = true
+          : _lifeCyclePaused = false;
+    });
+    super.didChangeAppLifecycleState(state);
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
   }
 
   Future onSelectNotification(String payload) async {
@@ -172,9 +196,12 @@ class _FlowScreenState extends State<FlowScreen> {
             _counter--;
           } else {
             _timer.cancel();
-            _timeForBreak
-                ? _showNotification('break')
-                : _showNotification('flow');
+            _lifeCyclePaused
+                ? _timeForBreak
+                    ? _showNotification('break')
+                    : _showNotification('flow')
+                : player.play('sounds/ding.mp3');
+            ;
             _isPlaying = false;
             _timeForBreak = !_timeForBreak;
             _counter = _flowTestTime;
