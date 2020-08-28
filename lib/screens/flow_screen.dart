@@ -1,7 +1,9 @@
 import 'dart:async';
 
 import 'package:flow_time/screens/settings_screen.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:liquid_progress_indicator/liquid_progress_indicator.dart';
 
 class FlowScreen extends StatefulWidget {
@@ -10,6 +12,9 @@ class FlowScreen extends StatefulWidget {
 }
 
 class _FlowScreenState extends State<FlowScreen> {
+  FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+      FlutterLocalNotificationsPlugin();
+
   int _counter = 10;
   int _flowDuration = 5400;
   int _flowTestTime = 10;
@@ -25,12 +30,123 @@ class _FlowScreenState extends State<FlowScreen> {
   Timer _timer;
   Timer _coffeeTimer;
 
+  var initializationSettingsAndroid;
+  var initializationSettingsIOS;
+  var initializationSettings;
+
+  void _showNotification(String mode) async {
+    switch (mode) {
+      case 'flow':
+        {
+          await _flowNotification();
+        }
+        break;
+      case 'break':
+        {
+          await _breakNotification();
+        }
+        break;
+      case 'coffee':
+        {
+          await _coffeeNotification();
+        }
+        break;
+    }
+  }
+
+  Future<void> _flowNotification() async {
+    var androidPlatformChannelSpecifics = AndroidNotificationDetails(
+      'channel_ID',
+      'channel_name',
+      'channel_description',
+      importance: Importance.Max,
+      priority: Priority.High,
+      ticker: 'test ticker',
+    );
+
+    var iOSChannelSpecifics = IOSNotificationDetails();
+    var platformChannelSpecifics = NotificationDetails(
+        androidPlatformChannelSpecifics, iOSChannelSpecifics);
+
+    await flutterLocalNotificationsPlugin.show(
+        0, 'Flow Finished', 'Ready for a break?', platformChannelSpecifics,
+        payload: 'flow payload');
+  }
+
+  Future<void> _breakNotification() async {
+    var androidPlatformChannelSpecifics = AndroidNotificationDetails(
+      'channel_ID',
+      'channel_name',
+      'channel_description',
+      importance: Importance.Max,
+      priority: Priority.High,
+      ticker: 'test ticker',
+    );
+
+    var iOSChannelSpecifics = IOSNotificationDetails();
+    var platformChannelSpecifics = NotificationDetails(
+        androidPlatformChannelSpecifics, iOSChannelSpecifics);
+
+    await flutterLocalNotificationsPlugin.show(
+        0, 'Break Finished', 'Ready to work?', platformChannelSpecifics,
+        payload: 'break payload');
+  }
+
+  Future<void> _coffeeNotification() async {
+    var androidPlatformChannelSpecifics = AndroidNotificationDetails(
+      'channel_ID',
+      'channel_name',
+      'channel_description',
+      importance: Importance.Max,
+      priority: Priority.High,
+      ticker: 'test ticker',
+    );
+
+    var iOSChannelSpecifics = IOSNotificationDetails();
+    var platformChannelSpecifics = NotificationDetails(
+        androidPlatformChannelSpecifics, iOSChannelSpecifics);
+
+    await flutterLocalNotificationsPlugin.show(
+        0, 'Coffee Finished', 'Time to refuel?', platformChannelSpecifics,
+        payload: 'coffee payload');
+  }
+
   @override
   void initState() {
     super.initState();
     _isPlaying = false;
     _timeForBreak = false;
     _isCoffeePlaying = false;
+    initializationSettingsAndroid = AndroidInitializationSettings('app_icon');
+    initializationSettingsIOS = IOSInitializationSettings(
+        onDidReceiveLocalNotification: onDidReceiveLocalNotification);
+    initializationSettings = InitializationSettings(
+        initializationSettingsAndroid, initializationSettingsIOS);
+    flutterLocalNotificationsPlugin.initialize(initializationSettings,
+        onSelectNotification: onSelectNotification);
+  }
+
+  Future onSelectNotification(String payload) async {
+    if (payload != null) {
+      debugPrint('Notification payload: $payload');
+    }
+  }
+
+  Future onDidReceiveLocalNotification(
+      int id, String title, String body, String payload) async {
+    await showDialog(
+      context: context,
+      builder: (BuildContext context) => CupertinoAlertDialog(
+        title: Text(title),
+        content: Text(body),
+        actions: [
+          CupertinoDialogAction(
+            isDefaultAction: true,
+            child: Text('Ok'),
+          ),
+        ],
+      ),
+    );
   }
 
   void _timerHandler() {
@@ -56,6 +172,9 @@ class _FlowScreenState extends State<FlowScreen> {
             _counter--;
           } else {
             _timer.cancel();
+            _timeForBreak
+                ? _showNotification('break')
+                : _showNotification('flow');
             _isPlaying = false;
             _timeForBreak = !_timeForBreak;
             _counter = _flowTestTime;
@@ -93,6 +212,7 @@ class _FlowScreenState extends State<FlowScreen> {
             _coffeeCounter--;
           } else {
             _coffeeTimer.cancel();
+            _showNotification('coffee');
             _isCoffeePlaying = false;
             _coffeeCounter = _coffeeTestTime;
           }
