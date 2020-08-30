@@ -1,9 +1,17 @@
+import 'package:flow_time/providers/settings_provider.dart';
 import 'package:flow_time/screens/flow_screen.dart';
 import 'package:flow_time/screens/settings_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 void main() {
-  runApp(MyApp());
+  runApp(
+    ChangeNotifierProvider(
+      child: MyApp(),
+      create: (BuildContext context) =>
+          SettingsProvider(isCoffeeTimerOn: true, flowDuration: 90),
+    ),
+  );
 }
 
 // Primary Color 3A7BF2

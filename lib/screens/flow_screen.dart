@@ -2,11 +2,13 @@ import 'dart:async';
 
 import 'package:audioplayers/audio_cache.dart';
 import 'package:audioplayers/audioplayers.dart';
+import 'package:flow_time/providers/settings_provider.dart';
 import 'package:flow_time/screens/settings_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:liquid_progress_indicator/liquid_progress_indicator.dart';
+import 'package:provider/provider.dart';
 
 class FlowScreen extends StatefulWidget {
   @override
@@ -33,6 +35,7 @@ class _FlowScreenState extends State<FlowScreen> with WidgetsBindingObserver {
   bool _isCoffeePlaying;
   Timer _timer;
   Timer _coffeeTimer;
+  bool _coffeeIsOn = true;
 
   bool _lifeCyclePaused = false;
 
@@ -264,140 +267,147 @@ class _FlowScreenState extends State<FlowScreen> with WidgetsBindingObserver {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: SafeArea(
-        child: Container(
-          width: double.infinity,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: <Widget>[
-              Stack(
-                children: [
-                  Container(
-                    height: 240,
-                    width: 240,
-                    child: LiquidCircularProgressIndicator(
-                      value: doubleConverter(
-                          (_counter.toDouble()) + .5, _flowTestTime),
-                      valueColor: AlwaysStoppedAnimation(
-                          Theme.of(context).primaryColorLight),
-                      backgroundColor: Colors.transparent,
-                      borderColor: Colors.transparent,
-                      borderWidth: 0,
-                      direction: Axis.vertical,
-                    ),
-                  ),
-                  Container(
-                    height: 240,
-                    width: 240,
-                    child: LiquidCircularProgressIndicator(
-                      value:
-                          doubleConverter(_counter.toDouble(), _flowTestTime),
-                      valueColor: AlwaysStoppedAnimation(
-                          Theme.of(context).primaryColor),
-                      backgroundColor: Colors.transparent,
-                      borderColor: Colors.transparent,
-                      borderWidth: 0,
-                      direction: Axis.vertical,
-                    ),
-                  ),
-                ],
-              ),
-              // Text(
-              //   formatTime(_counter.toDouble()),
-              //   style: Theme.of(context).textTheme.headline6,
-              // ),
-              InkWell(
-                onTap: _timerHandler,
-                child: Container(
-                  width: 117,
-                  height: 117,
-                  decoration: BoxDecoration(
-                    color: Theme.of(context).accentColor,
-                    borderRadius: BorderRadius.circular(100),
-                  ),
-                  child: Center(
-                    child: _isPlaying
-                        ? Icon(
-                            Icons.pause,
-                            size: 60,
-                            color: Theme.of(context).canvasColor,
-                          )
-                        : Icon(
-                            Icons.play_arrow,
-                            size: 60,
-                            color: Theme.of(context).canvasColor,
-                          ),
-                  ),
-                ),
-              ),
-              GestureDetector(
-                onTap: _coffeeTimerHandler,
-                child: Container(
-                  child: Column(
+    return Consumer<SettingsProvider>(
+      builder: (context, settingsProvider, child) {
+        return Scaffold(
+          body: SafeArea(
+            child: Container(
+              width: double.infinity,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: <Widget>[
+                  Stack(
                     children: [
-                      Stack(
-                        children: [
-                          Container(
-                            height: 64,
-                            width: 64,
-                            child: LiquidCircularProgressIndicator(
-                              value: doubleConverter(
-                                  (_coffeeCounter.toDouble()) + 2,
-                                  _coffeeTestTime),
-                              valueColor:
-                                  AlwaysStoppedAnimation(Colors.brown[300]),
-                              backgroundColor: Colors.transparent,
-                              borderColor: Colors.transparent,
-                              borderWidth: 0,
-                              direction: Axis.vertical,
-                            ),
-                          ),
-                          Container(
-                            height: 64,
-                            width: 64,
-                            child: LiquidCircularProgressIndicator(
-                              value: doubleConverter(
-                                  _coffeeCounter.toDouble(), _coffeeTestTime),
-                              valueColor:
-                                  AlwaysStoppedAnimation(Colors.brown[600]),
-                              backgroundColor: Colors.transparent,
-                              borderColor: Colors.transparent,
-                              borderWidth: 0,
-                              direction: Axis.vertical,
-                            ),
-                          ),
-                        ],
+                      Container(
+                        height: 240,
+                        width: 240,
+                        child: LiquidCircularProgressIndicator(
+                          value: doubleConverter(
+                              (_counter.toDouble()) + .5, _flowTestTime),
+                          valueColor: AlwaysStoppedAnimation(
+                              Theme.of(context).primaryColorLight),
+                          backgroundColor: Colors.transparent,
+                          borderColor: Colors.transparent,
+                          borderWidth: 0,
+                          direction: Axis.vertical,
+                        ),
                       ),
-                      // Text(
-                      //   formatTime(_coffeeCounter.toDouble()),
-                      // ),
+                      Container(
+                        height: 240,
+                        width: 240,
+                        child: LiquidCircularProgressIndicator(
+                          value: doubleConverter(
+                              _counter.toDouble(), _flowTestTime),
+                          valueColor: AlwaysStoppedAnimation(
+                              Theme.of(context).primaryColor),
+                          backgroundColor: Colors.transparent,
+                          borderColor: Colors.transparent,
+                          borderWidth: 0,
+                          direction: Axis.vertical,
+                        ),
+                      ),
                     ],
                   ),
-                ),
+                  // Text(
+                  //   formatTime(_counter.toDouble()),
+                  //   style: Theme.of(context).textTheme.headline6,
+                  // ),
+                  InkWell(
+                    onTap: _timerHandler,
+                    child: Container(
+                      width: 117,
+                      height: 117,
+                      decoration: BoxDecoration(
+                        color: Theme.of(context).accentColor,
+                        borderRadius: BorderRadius.circular(100),
+                      ),
+                      child: Center(
+                        child: _isPlaying
+                            ? Icon(
+                                Icons.pause,
+                                size: 60,
+                                color: Theme.of(context).canvasColor,
+                              )
+                            : Icon(
+                                Icons.play_arrow,
+                                size: 60,
+                                color: Theme.of(context).canvasColor,
+                              ),
+                      ),
+                    ),
+                  ),
+                  if (settingsProvider.getCoffee)
+                    GestureDetector(
+                      onTap: _coffeeTimerHandler,
+                      child: Container(
+                        child: Column(
+                          children: [
+                            Stack(
+                              children: [
+                                Container(
+                                  height: 64,
+                                  width: 64,
+                                  child: LiquidCircularProgressIndicator(
+                                    value: doubleConverter(
+                                        (_coffeeCounter.toDouble()) + 2,
+                                        _coffeeTestTime),
+                                    valueColor: AlwaysStoppedAnimation(
+                                        Colors.brown[300]),
+                                    backgroundColor: Colors.transparent,
+                                    borderColor: Colors.transparent,
+                                    borderWidth: 0,
+                                    direction: Axis.vertical,
+                                  ),
+                                ),
+                                Container(
+                                  height: 64,
+                                  width: 64,
+                                  child: LiquidCircularProgressIndicator(
+                                    value: doubleConverter(
+                                        _coffeeCounter.toDouble(),
+                                        _coffeeTestTime),
+                                    valueColor: AlwaysStoppedAnimation(
+                                        Colors.brown[600]),
+                                    backgroundColor: Colors.transparent,
+                                    borderColor: Colors.transparent,
+                                    borderWidth: 0,
+                                    direction: Axis.vertical,
+                                  ),
+                                ),
+                              ],
+                            ),
+                            // Text(
+                            //   formatTime(_coffeeCounter.toDouble()),
+                            // ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  GestureDetector(
+                    child: Icon(
+                      Icons.settings_rounded,
+                      size: 35,
+                      color: Theme.of(context)
+                          .textTheme
+                          .bodyText2
+                          .color
+                          .withOpacity(0.75),
+                    ),
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => SettingsScreen()),
+                      );
+                    },
+                  )
+                ],
               ),
-              GestureDetector(
-                child: Icon(
-                  Icons.settings_rounded,
-                  size: 35,
-                  color: Theme.of(context)
-                      .textTheme
-                      .bodyText2
-                      .color
-                      .withOpacity(0.75),
-                ),
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => SettingsScreen()),
-                  );
-                },
-              )
-            ],
+            ),
           ),
-        ),
-      ),
+        );
+      },
     );
   }
 }
