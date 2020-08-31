@@ -124,10 +124,13 @@ class _SettingsScreenState extends State<SettingsScreen> {
                         width: 60,
                         child: Switch(
                           activeColor: Theme.of(context).primaryColor,
-                          value: notificationsOn,
+                          value: settingsProvider.getNotifications,
                           onChanged: (newValue) {
                             setState(() {
-                              notificationsOn = !notificationsOn;
+                              SettingsProvider settingsProvider =
+                                  Provider.of<SettingsProvider>(context,
+                                      listen: false);
+                              settingsProvider.swapNotifications();
                             });
                           },
                         ),
@@ -153,10 +156,13 @@ class _SettingsScreenState extends State<SettingsScreen> {
                         width: 60,
                         child: Switch(
                           activeColor: Theme.of(context).primaryColor,
-                          value: soundOn,
+                          value: settingsProvider.getSound,
                           onChanged: (newValue) {
                             setState(() {
-                              soundOn = !soundOn;
+                              SettingsProvider settingsProvider =
+                                  Provider.of<SettingsProvider>(context,
+                                      listen: false);
+                              settingsProvider.swapSound();
                             });
                           },
                         ),
@@ -214,10 +220,13 @@ class _SettingsScreenState extends State<SettingsScreen> {
                         width: 60,
                         child: Switch(
                           activeColor: Theme.of(context).primaryColor,
-                          value: darkThemeOn,
+                          value: settingsProvider.getDarkTheme,
                           onChanged: (newValue) {
                             setState(() {
-                              darkThemeOn = !darkThemeOn;
+                              SettingsProvider settingsProvider =
+                                  Provider.of<SettingsProvider>(context,
+                                      listen: false);
+                              settingsProvider.swapDarkTheme();
                             });
                           },
                         ),

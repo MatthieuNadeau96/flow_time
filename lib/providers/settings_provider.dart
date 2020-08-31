@@ -8,16 +8,12 @@ class SettingsProvider with ChangeNotifier {
   int breakDuration = 20; // test // real is -> 1200
 
   bool _notifications;
-  bool notifications = true;
 
   bool _sound;
-  bool sound = true;
 
   bool _coffeeTimer;
-  bool coffeeTimer = true;
 
   bool _darkTheme;
-  bool darkTheme = false;
 
   SettingsProvider({
     int flowDuration,

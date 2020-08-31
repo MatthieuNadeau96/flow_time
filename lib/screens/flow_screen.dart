@@ -11,6 +11,10 @@ import 'package:liquid_progress_indicator/liquid_progress_indicator.dart';
 import 'package:provider/provider.dart';
 
 class FlowScreen extends StatefulWidget {
+  bool soundHandle;
+  bool notificationHandle;
+  FlowScreen({this.soundHandle, this.notificationHandle});
+
   @override
   _FlowScreenState createState() => _FlowScreenState();
 }
@@ -44,23 +48,26 @@ class _FlowScreenState extends State<FlowScreen> with WidgetsBindingObserver {
   var initializationSettings;
 
   void _showNotification(String mode) async {
-    switch (mode) {
-      case 'flow':
-        {
-          await _flowNotification();
-        }
-        break;
-      case 'break':
-        {
-          await _breakNotification();
-        }
-        break;
-      case 'coffee':
-        {
-          await _coffeeNotification();
-        }
-        break;
+    if (widget.notificationHandle == true) {
+      switch (mode) {
+        case 'flow':
+          {
+            await _flowNotification();
+          }
+          break;
+        case 'break':
+          {
+            await _breakNotification();
+          }
+          break;
+        case 'coffee':
+          {
+            await _coffeeNotification();
+          }
+          break;
+      }
     }
+    return;
   }
 
   Future<void> _flowNotification() async {
@@ -203,8 +210,9 @@ class _FlowScreenState extends State<FlowScreen> with WidgetsBindingObserver {
                 ? _timeForBreak
                     ? _showNotification('break')
                     : _showNotification('flow')
-                : player.play('sounds/ding.mp3');
-            ;
+                : widget.soundHandle == true
+                    ? player.play('sounds/ding.mp3')
+                    : null;
             _isPlaying = false;
             _timeForBreak = !_timeForBreak;
             _counter = _flowTestTime;
@@ -368,7 +376,11 @@ class _FlowScreenState extends State<FlowScreen> with WidgetsBindingObserver {
                                         _coffeeCounter.toDouble(),
                                         _coffeeTestTime),
                                     valueColor: AlwaysStoppedAnimation(
-                                        Colors.brown[600]),
+                                      Theme.of(context)
+                                          .textTheme
+                                          .bodyText1
+                                          .color,
+                                    ),
                                     backgroundColor: Colors.transparent,
                                     borderColor: Colors.transparent,
                                     borderWidth: 0,

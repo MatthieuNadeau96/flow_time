@@ -8,8 +8,14 @@ void main() {
   runApp(
     ChangeNotifierProvider(
       child: MyApp(),
-      create: (BuildContext context) =>
-          SettingsProvider(isCoffeeTimerOn: true, flowDuration: 90),
+      create: (BuildContext context) => SettingsProvider(
+        flowDuration: 90,
+        breakDuration: 20,
+        isNotificationOn: true,
+        isSoundOn: true,
+        isCoffeeTimerOn: true,
+        isDarkThemeOn: false,
+      ),
     ),
   );
 }
@@ -27,25 +33,53 @@ void main() {
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flow Time',
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        primaryColor: Color(0xff3A7BF2),
-        primaryColorLight: Color(0xff6A9BF6),
-        accentColor: Color(0xffA3BCFE),
-        canvasColor: Color(0xffFAFCFF),
-        visualDensity: VisualDensity.adaptivePlatformDensity,
-        textTheme: TextTheme(
-          bodyText2: TextStyle(
-            color: Color(0xff010813),
-          ),
-        ),
-        iconTheme: IconThemeData(
-          color: Color(0xffD1D9E0),
-        ),
-      ),
-      home: RootPage(),
+    return Consumer<SettingsProvider>(
+      builder: (context, settingsProvider, child) {
+        return MaterialApp(
+          title: 'Flow Time',
+          debugShowCheckedModeBanner: false,
+          theme: !settingsProvider.getDarkTheme
+              ? ThemeData(
+                  primaryColor: Color(0xff3A7BF2),
+                  primaryColorLight: Color(0xff6A9BF6),
+                  accentColor: Color(0xffA3BCFE),
+                  canvasColor: Color(0xffFAFCFF),
+                  visualDensity: VisualDensity.adaptivePlatformDensity,
+                  textTheme: TextTheme(
+                    bodyText2: TextStyle(
+                      color: Color(0xff010813),
+                    ),
+                    bodyText1: TextStyle(
+                      // coffee color
+                      color: Color(0xff6D4D3E),
+                    ),
+                  ),
+                  iconTheme: IconThemeData(
+                    color: Color(0xffD1D9E0),
+                  ),
+                )
+              : ThemeData(
+                  primaryColor: Color(0xff083487),
+                  primaryColorLight: Color(0xff0A43AE),
+                  accentColor: Color(0xff7297FE),
+                  canvasColor: Color(0xff021027),
+                  visualDensity: VisualDensity.adaptivePlatformDensity,
+                  textTheme: TextTheme(
+                    bodyText2: TextStyle(
+                      color: Color(0xffFAFCFF),
+                    ),
+                    bodyText1: TextStyle(
+                      // coffee color
+                      color: Color(0xff412E25),
+                    ),
+                  ),
+                  iconTheme: IconThemeData(
+                    color: Color(0xffFAFCFF),
+                  ),
+                ),
+          home: RootPage(),
+        );
+      },
     );
   }
 }
@@ -76,8 +110,15 @@ class _RootPageState extends State<RootPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: FlowScreen(),
+    return Consumer<SettingsProvider>(
+      builder: (context, settingsProvider, child) {
+        return Scaffold(
+          body: FlowScreen(
+            soundHandle: settingsProvider.getSound,
+            notificationHandle: settingsProvider.getNotifications,
+          ),
+        );
+      },
     );
   }
 }
