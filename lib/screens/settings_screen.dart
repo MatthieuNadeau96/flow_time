@@ -93,7 +93,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                         child: GestureDetector(
                           child: Center(
                             child: Text(
-                              '$breakDuration min',
+                              '${settingsProvider.getBreakDuration} min',
                               style: TextStyle(
                                 color: Theme.of(context).primaryColor,
                                 fontSize: 16,
@@ -260,11 +260,15 @@ class _SettingsScreenState extends State<SettingsScreen> {
             step: 1,
             onChanged: (newValue) {
               setState(() {
-                isFlow ? flowDuration = newValue : breakDuration = newValue;
+                text == 'Flow'
+                    ? flowDuration = newValue
+                    : breakDuration = newValue;
               });
               SettingsProvider settingsProvider =
                   Provider.of<SettingsProvider>(context, listen: false);
-              settingsProvider.flowDurationChange(newValue);
+              text == 'Flow'
+                  ? settingsProvider.flowDurationChange(newValue)
+                  : settingsProvider.breakDurationChange(newValue);
             }),
         actions: [
           FlatButton(

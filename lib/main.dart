@@ -3,18 +3,21 @@ import 'package:flow_time/screens/flow_screen.dart';
 import 'package:flow_time/screens/settings_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-void main() {
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  SharedPreferences prefs = await SharedPreferences.getInstance();
   runApp(
     ChangeNotifierProvider(
       child: MyApp(),
       create: (BuildContext context) => SettingsProvider(
-        flowDuration: 90,
-        breakDuration: 20,
-        isNotificationOn: true,
-        isSoundOn: true,
-        isCoffeeTimerOn: true,
-        isDarkThemeOn: false,
+        flowDuration: prefs.getInt('flowDuration') ?? 90,
+        breakDuration: prefs.getInt('breakDuration') ?? 20,
+        isNotificationOn: prefs.getBool('isNotifications') ?? true,
+        isSoundOn: prefs.getBool('isSound') ?? true,
+        isCoffeeTimerOn: prefs.getBool('isCoffeeTimer') ?? true,
+        isDarkThemeOn: prefs.getBool('isDarkTheme') ?? false,
       ),
     ),
   );

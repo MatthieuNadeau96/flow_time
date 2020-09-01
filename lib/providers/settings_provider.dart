@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class SettingsProvider with ChangeNotifier {
   int _flowDuration;
@@ -31,37 +32,51 @@ class SettingsProvider with ChangeNotifier {
     _darkTheme = isDarkThemeOn ? true : false;
   }
 
-  void flowDurationChange(int newValue) {
+  Future<void> flowDurationChange(int newValue) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
     _flowDuration = newValue;
+    prefs.setInt('flowDuration', _flowDuration);
     notifyListeners();
   }
 
-  void breakDurationChange(int newValue) {
-    _flowDuration = newValue;
+  Future<void> breakDurationChange(int newValue) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    _breakDuration = newValue;
+    prefs.setInt('breakDuration', _breakDuration);
     notifyListeners();
   }
 
-  void swapNotifications() {
+  Future<void> swapNotifications() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
     _notifications = !_notifications;
+    prefs.setBool('isNotifications', _notifications);
     notifyListeners();
   }
 
-  void swapSound() {
+  Future<void> swapSound() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
     _sound = !_sound;
+    prefs.setBool('isSound', _sound);
     notifyListeners();
   }
 
-  void swapCoffee() {
+  Future<void> swapCoffee() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
     _coffeeTimer = !_coffeeTimer;
+    prefs.setBool('isCoffeeTimer', _coffeeTimer);
     notifyListeners();
   }
 
-  void swapDarkTheme() {
+  Future<void> swapDarkTheme() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
     _darkTheme = !_darkTheme;
+    prefs.setBool('isDarkTheme', _darkTheme);
     notifyListeners();
   }
 
   int get getFlowDuration => _flowDuration;
+
+  int get getBreakDuration => _breakDuration;
 
   bool get getNotifications => _notifications;
 
