@@ -42,6 +42,7 @@ class MyApp extends StatelessWidget {
           title: 'Flow Time',
           debugShowCheckedModeBanner: false,
           theme: !settingsProvider.getDarkTheme
+              // LIGHT THEME
               ? ThemeData(
                   primaryColor: Color(0xff3A7BF2),
                   primaryColorLight: Color(0xff6A9BF6),
@@ -61,6 +62,7 @@ class MyApp extends StatelessWidget {
                     color: Color(0xffD1D9E0),
                   ),
                 )
+              // DARK THEME
               : ThemeData(
                   primaryColor: Color(0xff083487),
                   primaryColorLight: Color(0xff0A43AE),
@@ -72,8 +74,7 @@ class MyApp extends StatelessWidget {
                       color: Color(0xffFAFCFF),
                     ),
                     bodyText1: TextStyle(
-                      // coffee color
-                      color: Color(0xff412E25),
+                      color: Color(0xff412E25), // coffee color
                     ),
                   ),
                   iconTheme: IconThemeData(
@@ -117,6 +118,8 @@ class _RootPageState extends State<RootPage> {
       builder: (context, settingsProvider, child) {
         return Scaffold(
           body: FlowScreen(
+            flowDuration: settingsProvider.getFlowDuration,
+            breakDuration: settingsProvider.getBreakDuration,
             soundHandle: settingsProvider.getSound,
             notificationHandle: settingsProvider.getNotifications,
           ),

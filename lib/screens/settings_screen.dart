@@ -249,38 +249,54 @@ class _SettingsScreenState extends State<SettingsScreen> {
 
   _showDialog(String text) async {
     bool isFlow = text == 'Flow';
+    final theme = Theme.of(context);
+
     await showDialog<int>(
       context: context,
-      child: AlertDialog(
-        title: Text('$text Duration'),
-        content: NumberPicker.integer(
-            initialValue: isFlow ? flowDuration : breakDuration,
-            minValue: 20,
-            maxValue: 100,
-            step: 1,
-            onChanged: (newValue) {
-              setState(() {
-                text == 'Flow'
-                    ? flowDuration = newValue
-                    : breakDuration = newValue;
-              });
-              SettingsProvider settingsProvider =
-                  Provider.of<SettingsProvider>(context, listen: false);
-              text == 'Flow'
-                  ? settingsProvider.flowDurationChange(newValue)
-                  : settingsProvider.breakDurationChange(newValue);
-            }),
-        actions: [
-          FlatButton(
-            child: Text(
-              'CONFIRM',
-              style: TextStyle(color: Theme.of(context).primaryColor),
+      child: Consumer<SettingsProvider>(
+        builder: (context, settingsProvider, child) {
+          return AlertDialog(
+            backgroundColor: Theme.of(context).canvasColor,
+            title: Text(
+              '$text Duration',
+              style: TextStyle(
+                color: Theme.of(context).textTheme.bodyText2.color,
+              ),
             ),
-            onPressed: () {
-              Navigator.of(context).pop();
-            },
-          ),
-        ],
+            content: NumberPicker.integer(
+              initialValue: isFlow
+                  ? settingsProvider.getFlowDuration
+                  : settingsProvider.getBreakDuration,
+              minValue: 20,
+              maxValue: 100,
+              step: 1,
+              onChanged: (newValue) {
+                SettingsProvider settingsProvider =
+                    Provider.of<SettingsProvider>(context, listen: false);
+                setState(
+                  () {
+                    if (isFlow) {
+                      settingsProvider.flowDurationChange(newValue);
+                    } else {
+                      settingsProvider.breakDurationChange(newValue);
+                    }
+                  },
+                );
+              },
+            ),
+            actions: [
+              FlatButton(
+                child: Text(
+                  'CONFIRM',
+                  style: TextStyle(color: Theme.of(context).primaryColor),
+                ),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              ),
+            ],
+          );
+        },
       ),
     );
   }
