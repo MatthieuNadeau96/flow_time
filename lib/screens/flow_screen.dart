@@ -347,7 +347,9 @@ class _FlowScreenState extends State<FlowScreen> with WidgetsBindingObserver {
                   // ),
                   InkWell(
                     onTap: _timerHandler,
-                    child: Container(
+                    borderRadius: BorderRadius.circular(100),
+                    splashColor: Theme.of(context).primaryColorLight,
+                    child: Ink(
                       width: 117,
                       height: 117,
                       decoration: BoxDecoration(
