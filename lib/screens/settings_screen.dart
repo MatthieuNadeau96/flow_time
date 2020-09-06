@@ -267,7 +267,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
               initialValue: isFlow
                   ? settingsProvider.getFlowDuration
                   : settingsProvider.getBreakDuration,
-              minValue: 5,
+              minValue: 1,
               maxValue: 120,
               step: 1,
               onChanged: (newValue) {

@@ -35,7 +35,7 @@ class _FlowScreenState extends State<FlowScreen> with WidgetsBindingObserver {
   int _counter = 5000;
   int _flowDuration = 5400;
   int _flowTestTime = 10;
-  int _breakDuration = 12;
+  int _breakDuration = 1200;
 
   int _coffeeDuration = 1200;
   int _coffeeTestTime = 20;
@@ -44,6 +44,7 @@ class _FlowScreenState extends State<FlowScreen> with WidgetsBindingObserver {
   bool _isPlaying;
   bool _timeForBreak;
   bool _isCoffeePlaying;
+  bool _isPaused = false;
   Timer _timer;
   Timer _coffeeTimer;
   bool _coffeeIsOn = true;
@@ -202,9 +203,13 @@ class _FlowScreenState extends State<FlowScreen> with WidgetsBindingObserver {
   }
 
   void _startTimer(int timerDuration) {
-    _timeForBreak
-        ? _counter = widget.breakDuration * 60
-        : _counter = widget.flowDuration * 60;
+    if (_isPaused) {
+      _counter = timerDuration;
+    } else {
+      _timeForBreak
+          ? _counter = widget.breakDuration * 60
+          : _counter = widget.flowDuration * 60;
+    }
     print(_counter);
     setState(() {
       _isPlaying = true;
@@ -234,6 +239,7 @@ class _FlowScreenState extends State<FlowScreen> with WidgetsBindingObserver {
 
   void _pauseTimer() {
     print(_counter);
+    _isPaused = true;
     _timer.cancel();
   }
 
