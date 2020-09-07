@@ -118,8 +118,8 @@ class _RootPageState extends State<RootPage> {
       builder: (context, settingsProvider, child) {
         return Scaffold(
           body: FlowScreen(
-            flowDuration: settingsProvider.getFlowDuration,
-            breakDuration: settingsProvider.getBreakDuration,
+            flowDuration: settingsProvider.getFlowDuration * 60,
+            breakDuration: settingsProvider.getBreakDuration * 60,
             soundHandle: settingsProvider.getSound,
             notificationHandle: settingsProvider.getNotifications,
           ),

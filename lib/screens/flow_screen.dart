@@ -32,14 +32,13 @@ class _FlowScreenState extends State<FlowScreen> with WidgetsBindingObserver {
   AudioPlayer audioPlayer = AudioPlayer();
   static AudioCache player = AudioCache();
 
-  int _counter = 5000;
+  int _counter;
   int _flowDuration = 5400;
   int _flowTestTime = 10;
   int _breakDuration = 1200;
 
-  int _coffeeDuration = 1200;
-  int _coffeeTestTime = 20;
-  int _coffeeCounter = 1200;
+  int _coffeeDuration = 100;
+  int _coffeeCounter = 100;
 
   bool _isPlaying;
   bool _timeForBreak;
@@ -207,8 +206,8 @@ class _FlowScreenState extends State<FlowScreen> with WidgetsBindingObserver {
       _counter = timerDuration;
     } else {
       _timeForBreak
-          ? _counter = widget.breakDuration * 60
-          : _counter = widget.flowDuration * 60;
+          ? _counter = widget.breakDuration
+          : _counter = widget.flowDuration;
     }
     print(_counter);
     setState(() {
@@ -268,7 +267,7 @@ class _FlowScreenState extends State<FlowScreen> with WidgetsBindingObserver {
             _coffeeTimer.cancel();
             _showNotification('coffee');
             _isCoffeePlaying = false;
-            _coffeeCounter = _coffeeTestTime;
+            _coffeeCounter = _coffeeDuration;
           }
         });
       }
@@ -292,6 +291,9 @@ class _FlowScreenState extends State<FlowScreen> with WidgetsBindingObserver {
   Widget build(BuildContext context) {
     return Consumer<SettingsProvider>(
       builder: (context, settingsProvider, child) {
+        if (_counter == null) {
+          _counter = widget.flowDuration;
+        }
         return Scaffold(
           body: SafeArea(
             child: Container(
@@ -308,11 +310,13 @@ class _FlowScreenState extends State<FlowScreen> with WidgetsBindingObserver {
                         child: LiquidCircularProgressIndicator(
                           value: _timeForBreak
                               ? doubleConverter(
-                                  (_counter.toDouble()) + .5,
+                                  (_counter.toDouble()) +
+                                      (_counter.toDouble() * 0.05),
                                   widget.breakDuration,
                                 )
                               : doubleConverter(
-                                  (_counter.toDouble()) + .5,
+                                  (_counter.toDouble()) +
+                                      (_counter.toDouble() * 0.05),
                                   widget.flowDuration,
                                 ),
                           valueColor: AlwaysStoppedAnimation(
@@ -390,8 +394,9 @@ class _FlowScreenState extends State<FlowScreen> with WidgetsBindingObserver {
                                   width: 64,
                                   child: LiquidCircularProgressIndicator(
                                     value: doubleConverter(
-                                        (_coffeeCounter.toDouble()) + 2,
-                                        _coffeeTestTime),
+                                        (_coffeeCounter.toDouble()) +
+                                            (_coffeeCounter.toDouble() * 0.1),
+                                        _coffeeDuration),
                                     valueColor: AlwaysStoppedAnimation(
                                         Colors.brown[300]),
                                     backgroundColor: Colors.transparent,
@@ -406,7 +411,7 @@ class _FlowScreenState extends State<FlowScreen> with WidgetsBindingObserver {
                                   child: LiquidCircularProgressIndicator(
                                     value: doubleConverter(
                                         _coffeeCounter.toDouble(),
-                                        _coffeeTestTime),
+                                        _coffeeDuration),
                                     valueColor: AlwaysStoppedAnimation(
                                       Theme.of(context)
                                           .textTheme
