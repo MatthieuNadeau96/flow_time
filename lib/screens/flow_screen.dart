@@ -255,6 +255,30 @@ class _FlowScreenState extends State<FlowScreen>
     });
   }
 
+  void _stopTimer() {
+    setState(() {
+      _isPlaying = false;
+      _timer.cancel();
+      _timeForBreak
+          ? _counter = widget.breakDuration
+          : _counter = widget.flowDuration;
+    });
+  }
+
+  void _skipTimer() {
+    setState(() {
+      _isPlaying = false;
+      _timer.cancel();
+      if (_timeForBreak) {
+        _counter = widget.flowDuration;
+        _timeForBreak = false;
+      } else {
+        _counter = widget.breakDuration;
+        _timeForBreak = true;
+      }
+    });
+  }
+
   void _pauseTimer() {
     print(_counter);
     _isPaused = true;
@@ -326,7 +350,6 @@ class _FlowScreenState extends State<FlowScreen>
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: <Widget>[
-                  // Text('${_counter}'),
                   Stack(
                     children: [
                       GestureDetector(
@@ -389,7 +412,7 @@ class _FlowScreenState extends State<FlowScreen>
                                 Icons.skip_next,
                                 color: Theme.of(context).canvasColor,
                               ),
-                              onTap: () {},
+                              onTap: _skipTimer,
                             ),
                           ),
                         ),
@@ -412,7 +435,7 @@ class _FlowScreenState extends State<FlowScreen>
                                 Icons.stop,
                                 color: Theme.of(context).canvasColor,
                               ),
-                              onTap: () {},
+                              onTap: _stopTimer,
                             ),
                           ),
                         ),
@@ -481,7 +504,6 @@ class _FlowScreenState extends State<FlowScreen>
                         ],
                       ),
                     ),
-
                   GestureDetector(
                     child: Icon(
                       Icons.settings_rounded,
