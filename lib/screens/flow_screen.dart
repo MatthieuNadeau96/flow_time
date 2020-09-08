@@ -5,6 +5,7 @@ import 'package:audioplayers/audioplayers.dart';
 import 'package:flow_time/providers/settings_provider.dart';
 import 'package:flow_time/screens/settings_screen.dart';
 import 'package:flow_time/widgets/circular_button.dart';
+import 'package:flow_time/widgets/wave_timer.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
@@ -323,55 +324,23 @@ class _FlowScreenState extends State<FlowScreen>
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: <Widget>[
-                  Stack(
-                    children: [
-                      Container(
-                        height: 240,
-                        width: 240,
-                        child: LiquidCircularProgressIndicator(
-                          value: _timeForBreak
-                              ? doubleConverter(
-                                  (_counter.toDouble()) +
-                                      (_counter.toDouble() * 0.05),
-                                  widget.breakDuration,
-                                )
-                              : doubleConverter(
-                                  (_counter.toDouble()) +
-                                      (_counter.toDouble() * 0.05),
-                                  widget.flowDuration,
-                                ),
-                          valueColor: AlwaysStoppedAnimation(
-                              Theme.of(context).primaryColorLight),
-                          backgroundColor: Colors.transparent,
-                          borderColor: Colors.transparent,
-                          borderWidth: 0,
-                          direction: Axis.vertical,
-                        ),
-                      ),
-                      Container(
-                        height: 240,
-                        width: 240,
-                        child: LiquidCircularProgressIndicator(
-                          value: _timeForBreak
-                              ? doubleConverter(
-                                  _counter.toDouble(),
-                                  widget.breakDuration,
-                                )
-                              : doubleConverter(
-                                  _counter.toDouble(),
-                                  widget.flowDuration,
-                                ),
-                          valueColor: AlwaysStoppedAnimation(
-                              Theme.of(context).primaryColor),
-                          backgroundColor: Colors.transparent,
-                          borderColor: Colors.transparent,
-                          borderWidth: 0,
-                          direction: Axis.vertical,
-                        ),
-                      ),
-                      Text('${_counter}'),
-                    ],
+                  Text('${_counter}'),
+                  WaveTimer(
+                    height: 240,
+                    width: 240,
+                    value: _timeForBreak
+                        ? doubleConverter(
+                            (_counter.toDouble()),
+                            widget.breakDuration,
+                          )
+                        : doubleConverter(
+                            (_counter.toDouble()),
+                            widget.flowDuration,
+                          ),
+                    foamColor: Theme.of(context).primaryColorLight,
+                    color: Theme.of(context).primaryColor,
                   ),
+
                   // Text(
                   //   formatTime(_counter.toDouble()),
                   //   style: Theme.of(context).textTheme.headline6,
@@ -456,46 +425,16 @@ class _FlowScreenState extends State<FlowScreen>
                       child: Container(
                         child: Column(
                           children: [
-                            Stack(
-                              children: [
-                                Container(
-                                  height: 64,
-                                  width: 64,
-                                  child: LiquidCircularProgressIndicator(
-                                    value: doubleConverter(
-                                        (_coffeeCounter.toDouble()) +
-                                            (_coffeeCounter.toDouble() * 0.1),
-                                        _coffeeDuration),
-                                    valueColor: AlwaysStoppedAnimation(
-                                        Colors.brown[300]),
-                                    backgroundColor: Colors.transparent,
-                                    borderColor: Colors.transparent,
-                                    borderWidth: 0,
-                                    direction: Axis.vertical,
-                                  ),
-                                ),
-                                Container(
-                                  height: 64,
-                                  width: 64,
-                                  child: LiquidCircularProgressIndicator(
-                                    value: doubleConverter(
-                                        _coffeeCounter.toDouble(),
-                                        _coffeeDuration),
-                                    valueColor: AlwaysStoppedAnimation(
-                                      Theme.of(context)
-                                          .textTheme
-                                          .bodyText1
-                                          .color,
-                                    ),
-                                    backgroundColor: Colors.transparent,
-                                    borderColor: Colors.transparent,
-                                    borderWidth: 0,
-                                    direction: Axis.vertical,
-                                  ),
-                                ),
-                                Text('$_coffeeCounter'),
-                              ],
+                            WaveTimer(
+                              height: 64,
+                              width: 64,
+                              color:
+                                  Theme.of(context).textTheme.bodyText1.color,
+                              foamColor: Colors.brown[300],
+                              value: doubleConverter(
+                                  _coffeeCounter.toDouble(), _coffeeDuration),
                             ),
+                            //
                             // Text(
                             //   formatTime(_coffeeCounter.toDouble()),
                             // ),
