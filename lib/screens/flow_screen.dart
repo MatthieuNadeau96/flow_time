@@ -4,6 +4,7 @@ import 'package:audioplayers/audio_cache.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flow_time/providers/settings_provider.dart';
 import 'package:flow_time/screens/settings_screen.dart';
+import 'package:flow_time/widgets/circular_button.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
@@ -26,11 +27,15 @@ class FlowScreen extends StatefulWidget {
   _FlowScreenState createState() => _FlowScreenState();
 }
 
-class _FlowScreenState extends State<FlowScreen> with WidgetsBindingObserver {
+class _FlowScreenState extends State<FlowScreen>
+    with WidgetsBindingObserver, SingleTickerProviderStateMixin {
   FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
       FlutterLocalNotificationsPlugin();
   AudioPlayer audioPlayer = AudioPlayer();
   static AudioCache player = AudioCache();
+
+  AnimationController animationController;
+  Animation degOneTranslationAnimation;
 
   int _counter;
   int _flowDuration = 5400;
@@ -148,6 +153,17 @@ class _FlowScreenState extends State<FlowScreen> with WidgetsBindingObserver {
         initializationSettingsAndroid, initializationSettingsIOS);
     flutterLocalNotificationsPlugin.initialize(initializationSettings,
         onSelectNotification: onSelectNotification);
+
+    animationController =
+        AnimationController(vsync: this, duration: Duration(milliseconds: 250));
+    degOneTranslationAnimation =
+        Tween(begin: 0.0, end: 1.0).animate(CurvedAnimation(
+      parent: animationController,
+      curve: Curves.easeOut,
+    ));
+    animationController.addListener(() {
+      setState(() {});
+    });
   }
 
   @override
@@ -287,6 +303,11 @@ class _FlowScreenState extends State<FlowScreen> with WidgetsBindingObserver {
 
   double doubleConverter(double d, int time) => d / time;
 
+  double getRadiansFromDegree(double degree) {
+    double unitRadian = 57.295779513;
+    return degree / unitRadian;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Consumer<SettingsProvider>(
@@ -355,19 +376,59 @@ class _FlowScreenState extends State<FlowScreen> with WidgetsBindingObserver {
                   //   formatTime(_counter.toDouble()),
                   //   style: Theme.of(context).textTheme.headline6,
                   // ),
-                  InkWell(
-                    onTap: _timerHandler,
-                    borderRadius: BorderRadius.circular(100),
-                    splashColor: Theme.of(context).primaryColorLight,
-                    child: Ink(
-                      width: 117,
-                      height: 117,
-                      decoration: BoxDecoration(
-                        color: Theme.of(context).accentColor,
-                        borderRadius: BorderRadius.circular(100),
+                  Stack(
+                    children: [
+                      Transform.translate(
+                        offset: Offset.fromDirection(
+                          getRadiansFromDegree(0),
+                          degOneTranslationAnimation.value * 100,
+                        ),
+                        child: Transform.scale(
+                          scale: degOneTranslationAnimation.value,
+                          child: Container(
+                            height: 117,
+                            child: CircularButton(
+                              width: 50,
+                              height: 50,
+                              color: Color(0xff85A6FE).withOpacity(
+                                  degOneTranslationAnimation.value),
+                              icon: Icon(
+                                Icons.skip_next,
+                                color: Theme.of(context).canvasColor,
+                              ),
+                              onTap: () {},
+                            ),
+                          ),
+                        ),
                       ),
-                      child: Center(
-                        child: _isPlaying
+                      Transform.translate(
+                        offset: Offset.fromDirection(
+                          getRadiansFromDegree(180),
+                          degOneTranslationAnimation.value * 100,
+                        ),
+                        child: Transform.scale(
+                          scale: degOneTranslationAnimation.value,
+                          child: Container(
+                            height: 117,
+                            child: CircularButton(
+                              width: 50,
+                              height: 50,
+                              color: Color(0xff85A6FE).withOpacity(
+                                  degOneTranslationAnimation.value),
+                              icon: Icon(
+                                Icons.stop,
+                                color: Theme.of(context).canvasColor,
+                              ),
+                              onTap: () {},
+                            ),
+                          ),
+                        ),
+                      ),
+                      CircularButton(
+                        width: 117,
+                        height: 117,
+                        color: Theme.of(context).accentColor,
+                        icon: _isPlaying
                             ? Icon(
                                 Icons.pause,
                                 size: 60,
@@ -378,8 +439,16 @@ class _FlowScreenState extends State<FlowScreen> with WidgetsBindingObserver {
                                 size: 60,
                                 color: Theme.of(context).canvasColor,
                               ),
+                        onTap: _timerHandler,
+                        onLongTap: () {
+                          if (animationController.isCompleted) {
+                            animationController.reverse();
+                          } else {
+                            animationController.forward();
+                          }
+                        },
                       ),
-                    ),
+                    ],
                   ),
                   if (settingsProvider.getCoffee)
                     GestureDetector(
