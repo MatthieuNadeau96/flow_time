@@ -53,6 +53,8 @@ class _FlowScreenState extends State<FlowScreen>
   Timer _timer;
   Timer _coffeeTimer;
   bool _coffeeIsOn = true;
+  bool _waveTimerHeld = false;
+  bool _coffeeTimerHeld = false;
 
   bool _lifeCyclePaused = false;
 
@@ -324,27 +326,49 @@ class _FlowScreenState extends State<FlowScreen>
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: <Widget>[
-                  Text('${_counter}'),
-                  WaveTimer(
-                    height: 240,
-                    width: 240,
-                    value: _timeForBreak
-                        ? doubleConverter(
-                            (_counter.toDouble()),
-                            widget.breakDuration,
-                          )
-                        : doubleConverter(
-                            (_counter.toDouble()),
-                            widget.flowDuration,
+                  // Text('${_counter}'),
+                  Stack(
+                    children: [
+                      GestureDetector(
+                        onLongPress: () {
+                          setState(() {
+                            _waveTimerHeld = !_waveTimerHeld;
+                          });
+                        },
+                        child: WaveTimer(
+                          height: 240,
+                          width: 240,
+                          value: _timeForBreak
+                              ? doubleConverter(
+                                  (_counter.toDouble()),
+                                  widget.breakDuration,
+                                )
+                              : doubleConverter(
+                                  (_counter.toDouble()),
+                                  widget.flowDuration,
+                                ),
+                          foamColor: Theme.of(context).primaryColorLight,
+                          color: Theme.of(context).primaryColor,
+                        ),
+                      ),
+                      if (_waveTimerHeld)
+                        Positioned.fill(
+                          child: Align(
+                            alignment: Alignment.center,
+                            child: Text(
+                              formatTime(_counter.toDouble()),
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .headline3
+                                  .copyWith(
+                                    fontWeight: FontWeight.w700,
+                                    color: Theme.of(context).primaryColorLight,
+                                  ),
+                            ),
                           ),
-                    foamColor: Theme.of(context).primaryColorLight,
-                    color: Theme.of(context).primaryColor,
+                        ),
+                    ],
                   ),
-
-                  // Text(
-                  //   formatTime(_counter.toDouble()),
-                  //   style: Theme.of(context).textTheme.headline6,
-                  // ),
                   Stack(
                     children: [
                       Transform.translate(
@@ -422,26 +446,42 @@ class _FlowScreenState extends State<FlowScreen>
                   if (settingsProvider.getCoffee)
                     GestureDetector(
                       onTap: _coffeeTimerHandler,
-                      child: Container(
-                        child: Column(
-                          children: [
-                            WaveTimer(
-                              height: 64,
-                              width: 64,
-                              color:
-                                  Theme.of(context).textTheme.bodyText1.color,
-                              foamColor: Colors.brown[300],
-                              value: doubleConverter(
-                                  _coffeeCounter.toDouble(), _coffeeDuration),
+                      onLongPress: () {
+                        setState(() {
+                          _coffeeTimerHeld = !_coffeeTimerHeld;
+                        });
+                      },
+                      child: Stack(
+                        children: [
+                          WaveTimer(
+                            height: 64,
+                            width: 64,
+                            color: Theme.of(context).textTheme.bodyText1.color,
+                            foamColor: Colors.brown[300],
+                            value: doubleConverter(
+                                _coffeeCounter.toDouble(), _coffeeDuration),
+                          ),
+                          if (_coffeeTimerHeld)
+                            Positioned.fill(
+                              child: Align(
+                                alignment: Alignment.center,
+                                child: Text(
+                                  formatTime(_coffeeCounter.toDouble()),
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .headline3
+                                      .copyWith(
+                                        fontWeight: FontWeight.w700,
+                                        fontSize: 14,
+                                        color: Colors.brown[300],
+                                      ),
+                                ),
+                              ),
                             ),
-                            //
-                            // Text(
-                            //   formatTime(_coffeeCounter.toDouble()),
-                            // ),
-                          ],
-                        ),
+                        ],
                       ),
                     ),
+
                   GestureDetector(
                     child: Icon(
                       Icons.settings_rounded,
