@@ -2,6 +2,7 @@ import 'package:flow_time/providers/settings_provider.dart';
 import 'package:flow_time/screens/flow_screen.dart';
 import 'package:flow_time/screens/settings_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:introduction_screen/introduction_screen.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -18,6 +19,7 @@ Future<void> main() async {
         isSoundOn: prefs.getBool('isSound') ?? true,
         isCoffeeTimerOn: prefs.getBool('isCoffeeTimer') ?? true,
         isDarkThemeOn: prefs.getBool('isDarkTheme') ?? false,
+        isFirstTime: prefs.getBool('isFirstTime') ?? false,
       ),
     ),
   );
@@ -114,15 +116,65 @@ class _RootPageState extends State<RootPage> {
 
   @override
   Widget build(BuildContext context) {
+    List<PageViewModel> getPages() {
+      return [
+        PageViewModel(
+          title: "Title of first page",
+          body:
+              "Here you can write the description of the page, to explain someting...",
+          image: Center(
+            child:
+                Image.network("https://domaine.com/image.png", height: 175.0),
+          ),
+        ),
+        PageViewModel(
+          title: "Title of first page",
+          body:
+              "Here you can write the description of the page, to explain someting...",
+          image:
+              Center(child: Image.asset("res/images/logo.png", height: 175.0)),
+          decoration: const PageDecoration(
+            pageColor: Colors.blue,
+          ),
+        ),
+        PageViewModel(
+          title: "Title of first page",
+          body:
+              "Here you can write the description of the page, to explain someting...",
+          image: const Center(child: Icon(Icons.android)),
+          decoration: const PageDecoration(
+            titleTextStyle: TextStyle(color: Colors.orange),
+            bodyTextStyle:
+                TextStyle(fontWeight: FontWeight.w700, fontSize: 20.0),
+          ),
+        ),
+      ];
+    }
+
     return Consumer<SettingsProvider>(
       builder: (context, settingsProvider, child) {
         return Scaffold(
-          body: FlowScreen(
-            flowDuration: settingsProvider.getFlowDuration * 60,
-            breakDuration: settingsProvider.getBreakDuration * 60,
-            soundHandle: settingsProvider.getSound,
-            notificationHandle: settingsProvider.getNotifications,
-          ),
+          body: settingsProvider.getFirstTime
+              ? IntroductionScreen(
+                  done: Text(
+                    'Done',
+                    style: Theme.of(context).textTheme.bodyText2.copyWith(),
+                  ),
+                  onDone: () {
+                    setState(() {
+                      SettingsProvider settingsProvider =
+                          Provider.of<SettingsProvider>(context, listen: false);
+                      settingsProvider.swapFirstTime();
+                    });
+                  },
+                  pages: getPages(),
+                )
+              : FlowScreen(
+                  flowDuration: settingsProvider.getFlowDuration * 60,
+                  breakDuration: settingsProvider.getBreakDuration * 60,
+                  soundHandle: settingsProvider.getSound,
+                  notificationHandle: settingsProvider.getNotifications,
+                ),
         );
       },
     );

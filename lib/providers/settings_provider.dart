@@ -16,6 +16,8 @@ class SettingsProvider with ChangeNotifier {
 
   bool _darkTheme;
 
+  bool _firstTime = true;
+
   SettingsProvider({
     int flowDuration,
     int breakDuration,
@@ -23,6 +25,7 @@ class SettingsProvider with ChangeNotifier {
     bool isSoundOn,
     bool isCoffeeTimerOn,
     bool isDarkThemeOn,
+    bool isFirstTime,
   }) {
     _flowDuration = flowDuration;
     _breakDuration = breakDuration;
@@ -30,6 +33,7 @@ class SettingsProvider with ChangeNotifier {
     _sound = isSoundOn ? true : false;
     _coffeeTimer = isCoffeeTimerOn ? true : false;
     _darkTheme = isDarkThemeOn ? true : false;
+    _firstTime = isFirstTime ? true : false;
   }
 
   Future<void> flowDurationChange(int newValue) async {
@@ -74,6 +78,13 @@ class SettingsProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  Future<void> swapFirstTime() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    _firstTime = !_firstTime;
+    prefs.setBool('isFirstTime', _firstTime);
+    notifyListeners();
+  }
+
   int get getFlowDuration => _flowDuration;
 
   int get getBreakDuration => _breakDuration;
@@ -85,4 +96,6 @@ class SettingsProvider with ChangeNotifier {
   bool get getCoffee => _coffeeTimer;
 
   bool get getDarkTheme => _darkTheme;
+
+  bool get getFirstTime => _firstTime;
 }
