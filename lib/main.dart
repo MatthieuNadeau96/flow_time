@@ -116,36 +116,69 @@ class _RootPageState extends State<RootPage> {
 
   @override
   Widget build(BuildContext context) {
+    var theme = Theme.of(context);
     List<PageViewModel> getPages() {
       return [
         PageViewModel(
-          title: "Title of first page",
-          body:
-              "Here you can write the description of the page, to explain someting...",
+          title:
+              "Flow time is designed to help you get into a flow state of mind. Making sure you stay focused and fully immersed in your work.",
+          body: '',
+          decoration: PageDecoration(
+            titleTextStyle: TextStyle(
+              fontSize: 20,
+            ),
+          ),
           image: Center(
-            child:
-                Image.network("https://domaine.com/image.png", height: 175.0),
+            child: Container(
+              height: 200,
+              width: 200,
+              child: Placeholder(),
+            ),
           ),
         ),
         PageViewModel(
-          title: "Title of first page",
-          body:
-              "Here you can write the description of the page, to explain someting...",
-          image:
-              Center(child: Image.asset("res/images/logo.png", height: 175.0)),
-          decoration: const PageDecoration(
-            pageColor: Colors.blue,
+          title: "",
+          bodyWidget: Center(
+            child: Container(
+              height: MediaQuery.of(context).size.height * 0.80,
+              child: Image.asset('assets/images/onboarding_screenshot.png'),
+            ),
           ),
         ),
         PageViewModel(
-          title: "Title of first page",
-          body:
-              "Here you can write the description of the page, to explain someting...",
-          image: const Center(child: Icon(Icons.android)),
-          decoration: const PageDecoration(
-            titleTextStyle: TextStyle(color: Colors.orange),
-            bodyTextStyle:
-                TextStyle(fontWeight: FontWeight.w700, fontSize: 20.0),
+          title: "",
+          bodyWidget: Container(
+            height: MediaQuery.of(context).size.height * 0.80,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                Container(
+                  child: Image.asset('assets/images/undraw_onboarding.png'),
+                ),
+                Text(''),
+                RaisedButton(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(100),
+                  ),
+                  padding: const EdgeInsets.all(20),
+                  color: Theme.of(context).accentColor,
+                  onPressed: () {
+                    setState(() {
+                      SettingsProvider settingsProvider =
+                          Provider.of<SettingsProvider>(context, listen: false);
+                      settingsProvider.swapFirstTime();
+                    });
+                  },
+                  child: Text(
+                    "Get Started",
+                    style: TextStyle(
+                      color: Theme.of(context).canvasColor,
+                      fontSize: 22,
+                    ),
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ];
@@ -154,11 +187,11 @@ class _RootPageState extends State<RootPage> {
     return Consumer<SettingsProvider>(
       builder: (context, settingsProvider, child) {
         return Scaffold(
-          body: settingsProvider.getFirstTime
+          body: !settingsProvider.getFirstTime
               ? IntroductionScreen(
                   done: Text(
-                    'Done',
-                    style: Theme.of(context).textTheme.bodyText2.copyWith(),
+                    '',
+                    style: theme.textTheme.bodyText2.copyWith(),
                   ),
                   onDone: () {
                     setState(() {
@@ -167,6 +200,16 @@ class _RootPageState extends State<RootPage> {
                       settingsProvider.swapFirstTime();
                     });
                   },
+                  dotsDecorator: DotsDecorator(
+                    size: const Size.square(10.0),
+                    activeSize: const Size(20.0, 10.0),
+                    activeColor: theme.accentColor,
+                    color: theme.iconTheme.color,
+                    spacing: const EdgeInsets.symmetric(horizontal: 3.0),
+                    activeShape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(25.0),
+                    ),
+                  ),
                   pages: getPages(),
                 )
               : FlowScreen(
