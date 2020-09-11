@@ -5,6 +5,7 @@ import 'package:audioplayers/audioplayers.dart';
 import 'package:flow_time/providers/settings_provider.dart';
 import 'package:flow_time/screens/settings_screen.dart';
 import 'package:flow_time/widgets/circular_button.dart';
+import 'package:flow_time/widgets/round_action_button.dart';
 import 'package:flow_time/widgets/wave_timer.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -392,79 +393,14 @@ class _FlowScreenState extends State<FlowScreen>
                         ),
                     ],
                   ),
-                  Stack(
-                    children: [
-                      Transform.translate(
-                        offset: Offset.fromDirection(
-                          getRadiansFromDegree(0),
-                          degOneTranslationAnimation.value * 100,
-                        ),
-                        child: Transform.scale(
-                          scale: degOneTranslationAnimation.value,
-                          child: Container(
-                            height: 117,
-                            child: CircularButton(
-                              width: 50,
-                              height: 50,
-                              color: Color(0xff85A6FE).withOpacity(
-                                  degOneTranslationAnimation.value),
-                              icon: Icon(
-                                Icons.skip_next,
-                                color: Theme.of(context).canvasColor,
-                              ),
-                              onTap: _skipTimer,
-                            ),
-                          ),
-                        ),
-                      ),
-                      Transform.translate(
-                        offset: Offset.fromDirection(
-                          getRadiansFromDegree(180),
-                          degOneTranslationAnimation.value * 100,
-                        ),
-                        child: Transform.scale(
-                          scale: degOneTranslationAnimation.value,
-                          child: Container(
-                            height: 117,
-                            child: CircularButton(
-                              width: 50,
-                              height: 50,
-                              color: Color(0xff85A6FE).withOpacity(
-                                  degOneTranslationAnimation.value),
-                              icon: Icon(
-                                Icons.stop,
-                                color: Theme.of(context).canvasColor,
-                              ),
-                              onTap: _stopTimer,
-                            ),
-                          ),
-                        ),
-                      ),
-                      CircularButton(
-                        width: 117,
-                        height: 117,
-                        color: Theme.of(context).accentColor,
-                        icon: _isPlaying
-                            ? Icon(
-                                Icons.pause,
-                                size: 60,
-                                color: Theme.of(context).canvasColor,
-                              )
-                            : Icon(
-                                Icons.play_arrow,
-                                size: 60,
-                                color: Theme.of(context).canvasColor,
-                              ),
-                        onTap: _timerHandler,
-                        onLongTap: () {
-                          if (animationController.isCompleted) {
-                            animationController.reverse();
-                          } else {
-                            animationController.forward();
-                          }
-                        },
-                      ),
-                    ],
+                  RoundActionButton(
+                    animation: degOneTranslationAnimation,
+                    radiansFromDegree: getRadiansFromDegree,
+                    animationController: animationController,
+                    skipTimer: _skipTimer,
+                    stopTimer: _stopTimer,
+                    isPlaying: _isPlaying,
+                    timerHandler: _timerHandler,
                   ),
                   if (settingsProvider.getCoffee)
                     GestureDetector(

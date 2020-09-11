@@ -187,7 +187,7 @@ class _RootPageState extends State<RootPage> {
     return Consumer<SettingsProvider>(
       builder: (context, settingsProvider, child) {
         return Scaffold(
-          body: !settingsProvider.getFirstTime
+          body: settingsProvider.getFirstTime
               ? IntroductionScreen(
                   done: Text(
                     '',
