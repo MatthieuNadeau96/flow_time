@@ -18,11 +18,15 @@ class FlowScreen extends StatefulWidget {
   int breakDuration;
   bool soundHandle;
   bool notificationHandle;
+  Key buttonKey;
+  Key timerKey;
   FlowScreen({
     this.flowDuration,
     this.breakDuration,
     this.soundHandle,
     this.notificationHandle,
+    this.buttonKey,
+    this.timerKey,
   });
 
   @override
@@ -359,20 +363,27 @@ class _FlowScreenState extends State<FlowScreen>
                             _waveTimerHeld = !_waveTimerHeld;
                           });
                         },
-                        child: WaveTimer(
-                          height: 240,
-                          width: 240,
-                          value: _timeForBreak
-                              ? doubleConverter(
-                                  (_counter.toDouble()),
-                                  widget.breakDuration,
-                                )
-                              : doubleConverter(
-                                  (_counter.toDouble()),
-                                  widget.flowDuration,
-                                ),
-                          foamColor: Theme.of(context).primaryColorLight,
-                          color: Theme.of(context).primaryColor,
+                        child: Container(
+                          height: 250,
+                          width: 250,
+                          key: widget.timerKey,
+                          child: Center(
+                            child: WaveTimer(
+                              height: 240,
+                              width: 240,
+                              value: _timeForBreak
+                                  ? doubleConverter(
+                                      (_counter.toDouble()),
+                                      widget.breakDuration,
+                                    )
+                                  : doubleConverter(
+                                      (_counter.toDouble()),
+                                      widget.flowDuration,
+                                    ),
+                              foamColor: Theme.of(context).primaryColorLight,
+                              color: Theme.of(context).primaryColor,
+                            ),
+                          ),
                         ),
                       ),
                       if (_waveTimerHeld)
@@ -393,14 +404,17 @@ class _FlowScreenState extends State<FlowScreen>
                         ),
                     ],
                   ),
-                  RoundActionButton(
-                    animation: degOneTranslationAnimation,
-                    radiansFromDegree: getRadiansFromDegree,
-                    animationController: animationController,
-                    skipTimer: _skipTimer,
-                    stopTimer: _stopTimer,
-                    isPlaying: _isPlaying,
-                    timerHandler: _timerHandler,
+                  Container(
+                    key: widget.buttonKey,
+                    child: RoundActionButton(
+                      animation: degOneTranslationAnimation,
+                      radiansFromDegree: getRadiansFromDegree,
+                      animationController: animationController,
+                      skipTimer: _skipTimer,
+                      stopTimer: _stopTimer,
+                      isPlaying: _isPlaying,
+                      timerHandler: _timerHandler,
+                    ),
                   ),
                   if (settingsProvider.getCoffee)
                     GestureDetector(

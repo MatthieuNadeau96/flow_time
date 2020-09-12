@@ -1,8 +1,9 @@
+import 'dart:async';
+
 import 'package:flow_time/providers/settings_provider.dart';
 import 'package:flow_time/screens/flow_screen.dart';
-import 'package:flow_time/screens/settings_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:introduction_screen/introduction_screen.dart';
+import 'package:highlighter_coachmark/highlighter_coachmark.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -96,128 +97,101 @@ class RootPage extends StatefulWidget {
 }
 
 class _RootPageState extends State<RootPage> {
-  // @override
-  // void initState() {
-  //   WidgetsBinding.instance.addObserver(this);
-  //   super.initState();
-  // }
+  GlobalKey _buttonKey = GlobalObjectKey("button");
+  GlobalKey _timerKey = GlobalObjectKey("timer");
 
-  // @override
-  // void didChangeAppLifecycleState(AppLifecycleState state) {
-  //   print(state);
-  //   super.didChangeAppLifecycleState(state);
-  // }
+  bool _firstTime;
 
-  // @override
-  // void dispose() {
-  //   WidgetsBinding.instance.removeObserver(this);
-  //   super.dispose();
-  // }
+  void showCoachMarkButton() {
+    CoachMark coachMark = CoachMark();
+    RenderBox target = _buttonKey.currentContext.findRenderObject();
+    Rect markRect = target.localToGlobal(Offset.zero) & target.size;
+    markRect = Rect.fromCircle(
+      center: markRect.center,
+      radius: markRect.longestSide * 0.16,
+    );
+    coachMark.show(
+        targetContext: _buttonKey.currentContext,
+        markRect: markRect,
+        children: [
+          Container(
+            margin: EdgeInsets.only(bottom: 100),
+            child: Align(
+              alignment: Alignment.center,
+              child: Text(
+                "Long tap on button to see more options",
+                style: TextStyle(
+                  fontSize: 20.0,
+                  fontStyle: FontStyle.italic,
+                  color: Theme.of(context).canvasColor,
+                ),
+              ),
+            ),
+          ),
+        ],
+        duration: null,
+        onClose: () {
+          Timer(Duration(seconds: 1), () => showCoachMarkTimer());
+        });
+  }
+
+  void showCoachMarkTimer() {
+    CoachMark coachMark = CoachMark();
+    RenderBox target = _timerKey.currentContext.findRenderObject();
+    Rect markRect = target.localToGlobal(Offset.zero) & target.size;
+    markRect = Rect.fromCircle(
+      center: markRect.center,
+      radius: markRect.longestSide * 0.5,
+    );
+    coachMark.show(
+      targetContext: _buttonKey.currentContext,
+      markRect: markRect,
+      children: [
+        Container(
+          child: Align(
+            alignment: Alignment.center,
+            child: Text(
+              "Long tap on timers to see time remaining",
+              style: TextStyle(
+                fontSize: 20.0,
+                fontStyle: FontStyle.italic,
+                color: Theme.of(context).canvasColor,
+              ),
+            ),
+          ),
+        ),
+      ],
+      duration: null,
+    );
+  }
+
+  void onBoardYo() {
+    SettingsProvider settingsProvider =
+        Provider.of<SettingsProvider>(context, listen: false);
+    if (!settingsProvider.getFirstTime) {
+      Timer(Duration(seconds: 1), () => showCoachMarkButton());
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    onBoardYo();
+  }
 
   @override
   Widget build(BuildContext context) {
-    var theme = Theme.of(context);
-    List<PageViewModel> getPages() {
-      return [
-        PageViewModel(
-          title:
-              "Flow time is designed to help you get into a flow state of mind. Making sure you stay focused and fully immersed in your work.",
-          body: '',
-          decoration: PageDecoration(
-            titleTextStyle: TextStyle(
-              fontSize: 20,
-            ),
-          ),
-          image: Center(
-            child: Container(
-              height: 200,
-              width: 200,
-              child: Placeholder(),
-            ),
-          ),
-        ),
-        PageViewModel(
-          title: "",
-          bodyWidget: Center(
-            child: Container(
-              height: MediaQuery.of(context).size.height * 0.80,
-              child: Image.asset('assets/images/onboarding_screenshot.png'),
-            ),
-          ),
-        ),
-        PageViewModel(
-          title: "",
-          bodyWidget: Container(
-            height: MediaQuery.of(context).size.height * 0.80,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                Container(
-                  child: Image.asset('assets/images/undraw_onboarding.png'),
-                ),
-                Text(''),
-                RaisedButton(
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(100),
-                  ),
-                  padding: const EdgeInsets.all(20),
-                  color: Theme.of(context).accentColor,
-                  onPressed: () {
-                    setState(() {
-                      SettingsProvider settingsProvider =
-                          Provider.of<SettingsProvider>(context, listen: false);
-                      settingsProvider.swapFirstTime();
-                    });
-                  },
-                  child: Text(
-                    "Get Started",
-                    style: TextStyle(
-                      color: Theme.of(context).canvasColor,
-                      fontSize: 22,
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ),
-      ];
-    }
-
     return Consumer<SettingsProvider>(
       builder: (context, settingsProvider, child) {
         return Scaffold(
-          body: settingsProvider.getFirstTime
-              ? IntroductionScreen(
-                  done: Text(
-                    '',
-                    style: theme.textTheme.bodyText2.copyWith(),
-                  ),
-                  onDone: () {
-                    setState(() {
-                      SettingsProvider settingsProvider =
-                          Provider.of<SettingsProvider>(context, listen: false);
-                      settingsProvider.swapFirstTime();
-                    });
-                  },
-                  dotsDecorator: DotsDecorator(
-                    size: const Size.square(10.0),
-                    activeSize: const Size(20.0, 10.0),
-                    activeColor: theme.accentColor,
-                    color: theme.iconTheme.color,
-                    spacing: const EdgeInsets.symmetric(horizontal: 3.0),
-                    activeShape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(25.0),
-                    ),
-                  ),
-                  pages: getPages(),
-                )
-              : FlowScreen(
-                  flowDuration: settingsProvider.getFlowDuration * 60,
-                  breakDuration: settingsProvider.getBreakDuration * 60,
-                  soundHandle: settingsProvider.getSound,
-                  notificationHandle: settingsProvider.getNotifications,
-                ),
+          body: FlowScreen(
+            buttonKey: _buttonKey,
+            timerKey: _timerKey,
+            flowDuration: settingsProvider.getFlowDuration * 60,
+            breakDuration: settingsProvider.getBreakDuration * 60,
+            soundHandle: settingsProvider.getSound,
+            notificationHandle: settingsProvider.getNotifications,
+          ),
         );
       },
     );

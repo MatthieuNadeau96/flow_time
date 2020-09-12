@@ -71,13 +71,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.1.3"
-  dots_indicator:
-    dependency: transitive
-    description:
-      name: dots_indicator
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "1.2.0"
   fake_async:
     dependency: transitive
     description:
@@ -121,6 +114,13 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
+  highlighter_coachmark:
+    dependency: "direct main"
+    description:
+      name: highlighter_coachmark
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.0.3"
   infinite_listview:
     dependency: transitive
     description:
@@ -135,13 +135,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.16.1"
-  introduction_screen:
-    dependency: "direct main"
-    description:
-      name: introduction_screen
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "1.0.9"
   liquid_progress_indicator:
     dependency: "direct main"
     description:
