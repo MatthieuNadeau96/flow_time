@@ -20,6 +20,7 @@ class FlowScreen extends StatefulWidget {
   bool notificationHandle;
   Key buttonKey;
   Key timerKey;
+  final Function onTappy;
   FlowScreen({
     this.flowDuration,
     this.breakDuration,
@@ -27,6 +28,7 @@ class FlowScreen extends StatefulWidget {
     this.notificationHandle,
     this.buttonKey,
     this.timerKey,
+    this.onTappy,
   });
 
   @override
@@ -355,6 +357,10 @@ class _FlowScreenState extends State<FlowScreen>
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: <Widget>[
+                  RaisedButton(
+                    onPressed: widget.onTappy,
+                    child: Text('Yo'),
+                  ),
                   Stack(
                     children: [
                       GestureDetector(
@@ -471,7 +477,8 @@ class _FlowScreenState extends State<FlowScreen>
                             builder: (context) => SettingsScreen()),
                       );
                     },
-                  )
+                  ),
+                  SizedBox(height: 10),
                 ],
               ),
             ),

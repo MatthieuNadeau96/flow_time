@@ -1,11 +1,14 @@
 import 'dart:async';
 
+import 'package:firebase_admob/firebase_admob.dart';
 import 'package:flow_time/providers/settings_provider.dart';
 import 'package:flow_time/screens/flow_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:highlighter_coachmark/highlighter_coachmark.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+const String testDevice = 'Mobile_id';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -100,7 +103,37 @@ class _RootPageState extends State<RootPage> {
   GlobalKey _buttonKey = GlobalObjectKey("button");
   GlobalKey _timerKey = GlobalObjectKey("timer");
 
+  BannerAd _bannerAd;
+  InterstitialAd _interstitialAd;
   bool _firstTime;
+
+  /////////// Ads ///////////
+
+  static const MobileAdTargetingInfo targetingInfo = MobileAdTargetingInfo(
+    testDevices: testDevice != null ? <String>[testDevice] : null,
+    nonPersonalizedAds: true,
+  );
+
+  BannerAd createBannerAd() {
+    return BannerAd(
+      adUnitId: BannerAd.testAdUnitId,
+      size: AdSize.banner,
+      targetingInfo: targetingInfo,
+      listener: (MobileAdEvent event) {
+        print('BannerAd $event');
+      },
+    );
+  }
+
+  InterstitialAd createInterstitialAd() {
+    return InterstitialAd(
+      adUnitId: InterstitialAd.testAdUnitId,
+      targetingInfo: targetingInfo,
+      listener: (MobileAdEvent event) {
+        print('InterstitialAd $event');
+      },
+    );
+  }
 
   void showCoachMarkButton() {
     CoachMark coachMark = CoachMark();
@@ -111,29 +144,32 @@ class _RootPageState extends State<RootPage> {
       radius: markRect.longestSide * 0.16,
     );
     coachMark.show(
-        targetContext: _buttonKey.currentContext,
-        markRect: markRect,
-        children: [
-          Container(
-            margin: EdgeInsets.only(bottom: 100),
-            child: Align(
-              alignment: Alignment.center,
-              child: Text(
-                "Long tap on button to see more options",
-                style: TextStyle(
-                  fontSize: 20.0,
-                  fontStyle: FontStyle.italic,
-                  color: Theme.of(context).canvasColor,
-                ),
+      targetContext: _buttonKey.currentContext,
+      markRect: markRect,
+      children: [
+        Container(
+          margin: EdgeInsets.only(bottom: 100),
+          child: Align(
+            alignment: Alignment.center,
+            child: Text(
+              "Long tap on button to see more options",
+              style: TextStyle(
+                fontSize: 20.0,
+                fontStyle: FontStyle.italic,
+                color: Theme.of(context).canvasColor,
               ),
             ),
           ),
-        ],
-        duration: null,
-        onClose: () {
-          Timer(Duration(seconds: 1), () => showCoachMarkTimer());
-        });
+        ),
+      ],
+      duration: null,
+      onClose: () {
+        Timer(Duration(seconds: 1), () => showCoachMarkTimer());
+      },
+    );
   }
+
+  /////////// On Boarding ///////////
 
   void showCoachMarkTimer() {
     CoachMark coachMark = CoachMark();
@@ -166,6 +202,7 @@ class _RootPageState extends State<RootPage> {
   }
 
   void onBoardYo() {
+    // fix name
     SettingsProvider settingsProvider =
         Provider.of<SettingsProvider>(context, listen: false);
     if (!settingsProvider.getFirstTime) {
@@ -173,10 +210,23 @@ class _RootPageState extends State<RootPage> {
     }
   }
 
+  ///////////////////////////////////////
+
   @override
   void initState() {
     super.initState();
-    onBoardYo();
+    FirebaseAdMob.instance.initialize(appId: BannerAd.testAdUnitId);
+    _bannerAd = createBannerAd()
+      ..load()
+      ..show();
+    onBoardYo(); // fix name
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _bannerAd.dispose();
+    _interstitialAd.dispose();
   }
 
   @override
@@ -191,6 +241,11 @@ class _RootPageState extends State<RootPage> {
             breakDuration: settingsProvider.getBreakDuration * 60,
             soundHandle: settingsProvider.getSound,
             notificationHandle: settingsProvider.getNotifications,
+            onTappy: () {
+              createInterstitialAd()
+                ..load()
+                ..show();
+            },
           ),
         );
       },
