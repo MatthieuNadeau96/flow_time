@@ -20,7 +20,7 @@ class FlowScreen extends StatefulWidget {
   bool notificationHandle;
   Key buttonKey;
   Key timerKey;
-  final Function onTappy;
+  Function interstitialAdHandler;
   FlowScreen({
     this.flowDuration,
     this.breakDuration,
@@ -28,7 +28,7 @@ class FlowScreen extends StatefulWidget {
     this.notificationHandle,
     this.buttonKey,
     this.timerKey,
-    this.onTappy,
+    this.interstitialAdHandler,
   });
 
   @override
@@ -256,6 +256,7 @@ class _FlowScreenState extends State<FlowScreen>
             _isPlaying = false;
             _timeForBreak = !_timeForBreak;
             _counter = widget.breakDuration;
+            widget.interstitialAdHandler();
           }
         });
       }
@@ -318,6 +319,7 @@ class _FlowScreenState extends State<FlowScreen>
             _showNotification('coffee');
             _isCoffeePlaying = false;
             _coffeeCounter = _coffeeDuration;
+            widget.interstitialAdHandler();
           }
         });
       }
@@ -357,10 +359,6 @@ class _FlowScreenState extends State<FlowScreen>
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: <Widget>[
-                  RaisedButton(
-                    onPressed: widget.onTappy,
-                    child: Text('Yo'),
-                  ),
                   Stack(
                     children: [
                       GestureDetector(

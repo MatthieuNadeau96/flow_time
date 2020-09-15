@@ -120,7 +120,7 @@ class _RootPageState extends State<RootPage> {
       size: AdSize.banner,
       targetingInfo: targetingInfo,
       listener: (MobileAdEvent event) {
-        print('BannerAd $event');
+        // print('BannerAd $event');
       },
     );
   }
@@ -241,7 +241,7 @@ class _RootPageState extends State<RootPage> {
             breakDuration: settingsProvider.getBreakDuration * 60,
             soundHandle: settingsProvider.getSound,
             notificationHandle: settingsProvider.getNotifications,
-            onTappy: () {
+            interstitialAdHandler: () {
               createInterstitialAd()
                 ..load()
                 ..show();
