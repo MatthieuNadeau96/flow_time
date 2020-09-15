@@ -20,6 +20,7 @@ class FlowScreen extends StatefulWidget {
   bool notificationHandle;
   Key buttonKey;
   Key timerKey;
+  Function interstitialAdHandler;
   FlowScreen({
     this.flowDuration,
     this.breakDuration,
@@ -27,6 +28,7 @@ class FlowScreen extends StatefulWidget {
     this.notificationHandle,
     this.buttonKey,
     this.timerKey,
+    this.interstitialAdHandler,
   });
 
   @override
@@ -254,6 +256,7 @@ class _FlowScreenState extends State<FlowScreen>
             _isPlaying = false;
             _timeForBreak = !_timeForBreak;
             _counter = widget.breakDuration;
+            widget.interstitialAdHandler();
           }
         });
       }
@@ -316,6 +319,7 @@ class _FlowScreenState extends State<FlowScreen>
             _showNotification('coffee');
             _isCoffeePlaying = false;
             _coffeeCounter = _coffeeDuration;
+            widget.interstitialAdHandler();
           }
         });
       }
@@ -471,7 +475,8 @@ class _FlowScreenState extends State<FlowScreen>
                             builder: (context) => SettingsScreen()),
                       );
                     },
-                  )
+                  ),
+                  SizedBox(height: 10),
                 ],
               ),
             ),
