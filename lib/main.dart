@@ -100,8 +100,9 @@ class RootPage extends StatefulWidget {
 }
 
 class _RootPageState extends State<RootPage> {
-  GlobalKey _buttonKey = GlobalObjectKey("button");
+  GlobalKey _buttonKey = GlobalObjectKey('button');
   GlobalKey _timerKey = GlobalObjectKey("timer");
+  GlobalKey _coffeeKey = GlobalObjectKey("coffee");
 
   BannerAd _bannerAd;
   InterstitialAd _interstitialAd;
@@ -134,6 +135,8 @@ class _RootPageState extends State<RootPage> {
       },
     );
   }
+
+  /////////// On Boarding ///////////
 
   void showCoachMarkButton() {
     CoachMark coachMark = CoachMark();
@@ -169,8 +172,6 @@ class _RootPageState extends State<RootPage> {
     );
   }
 
-  /////////// On Boarding ///////////
-
   void showCoachMarkTimer() {
     CoachMark coachMark = CoachMark();
     RenderBox target = _timerKey.currentContext.findRenderObject();
@@ -180,7 +181,7 @@ class _RootPageState extends State<RootPage> {
       radius: markRect.longestSide * 0.5,
     );
     coachMark.show(
-      targetContext: _buttonKey.currentContext,
+      targetContext: _timerKey.currentContext,
       markRect: markRect,
       children: [
         Container(
@@ -198,15 +199,49 @@ class _RootPageState extends State<RootPage> {
         ),
       ],
       duration: null,
+      onClose: () {
+        Timer(Duration(seconds: 1), () => showCoachMarkCoffee());
+      },
     );
   }
 
-  void onBoardYo() {
+  void showCoachMarkCoffee() {
+    CoachMark coachMark = CoachMark();
+    RenderBox target = _coffeeKey.currentContext.findRenderObject();
+    Rect markRect = target.localToGlobal(Offset.zero) & target.size;
+    markRect = Rect.fromCircle(
+      center: markRect.center,
+      radius: markRect.longestSide * 0.5,
+    );
+    coachMark.show(
+      targetContext: _coffeeKey.currentContext,
+      markRect: markRect,
+      children: [
+        Container(
+          child: Align(
+            alignment: Alignment.center,
+            child: Text(
+              "Tap on the coffee timer to start and pause",
+              style: TextStyle(
+                fontSize: 20.0,
+                fontStyle: FontStyle.italic,
+                color: Theme.of(context).canvasColor,
+              ),
+            ),
+          ),
+        ),
+      ],
+      duration: null,
+    );
+  }
+
+  void startOnBoard() {
     // fix name
     SettingsProvider settingsProvider =
         Provider.of<SettingsProvider>(context, listen: false);
-    if (!settingsProvider.getFirstTime) {
+    if (settingsProvider.getFirstTime) {
       Timer(Duration(seconds: 1), () => showCoachMarkButton());
+      settingsProvider.swapFirstTime();
     }
   }
 
@@ -219,7 +254,7 @@ class _RootPageState extends State<RootPage> {
     _bannerAd = createBannerAd()
       ..load()
       ..show();
-    onBoardYo(); // fix name
+    startOnBoard(); // fix name
   }
 
   @override
@@ -235,8 +270,8 @@ class _RootPageState extends State<RootPage> {
       builder: (context, settingsProvider, child) {
         return Scaffold(
           body: FlowScreen(
-            buttonKey: _buttonKey,
-            timerKey: _timerKey,
+            // buttonKey: _buttonKey,
+            // timerKey: _timerKey,
             flowDuration: settingsProvider.getFlowDuration * 60,
             breakDuration: settingsProvider.getBreakDuration * 60,
             soundHandle: settingsProvider.getSound,

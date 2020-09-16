@@ -18,16 +18,12 @@ class FlowScreen extends StatefulWidget {
   int breakDuration;
   bool soundHandle;
   bool notificationHandle;
-  Key buttonKey;
-  Key timerKey;
   Function interstitialAdHandler;
   FlowScreen({
     this.flowDuration,
     this.breakDuration,
     this.soundHandle,
     this.notificationHandle,
-    this.buttonKey,
-    this.timerKey,
     this.interstitialAdHandler,
   });
 
@@ -370,7 +366,7 @@ class _FlowScreenState extends State<FlowScreen>
                         child: Container(
                           height: 250,
                           width: 250,
-                          key: widget.timerKey,
+                          key: GlobalObjectKey('timer'),
                           child: Center(
                             child: WaveTimer(
                               height: 240,
@@ -409,7 +405,7 @@ class _FlowScreenState extends State<FlowScreen>
                     ],
                   ),
                   Container(
-                    key: widget.buttonKey,
+                    key: GlobalObjectKey('button'),
                     child: RoundActionButton(
                       animation: degOneTranslationAnimation,
                       radiansFromDegree: getRadiansFromDegree,
@@ -430,13 +426,17 @@ class _FlowScreenState extends State<FlowScreen>
                       },
                       child: Stack(
                         children: [
-                          WaveTimer(
-                            height: 64,
-                            width: 64,
-                            color: Theme.of(context).textTheme.bodyText1.color,
-                            foamColor: Colors.brown[300],
-                            value: doubleConverter(
-                                _coffeeCounter.toDouble(), _coffeeDuration),
+                          Container(
+                            key: GlobalObjectKey('coffee'),
+                            child: WaveTimer(
+                              height: 64,
+                              width: 64,
+                              color:
+                                  Theme.of(context).textTheme.bodyText1.color,
+                              foamColor: Colors.brown[300],
+                              value: doubleConverter(
+                                  _coffeeCounter.toDouble(), _coffeeDuration),
+                            ),
                           ),
                           if (_coffeeTimerHeld)
                             Positioned.fill(
