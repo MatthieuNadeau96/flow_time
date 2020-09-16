@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:highlighter_coachmark/highlighter_coachmark.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter/services.dart';
 
 const String testDevice = 'Mobile_id';
 
@@ -42,6 +43,7 @@ Future<void> main() async {
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
     return Consumer<SettingsProvider>(
       builder: (context, settingsProvider, child) {
         return MaterialApp(
