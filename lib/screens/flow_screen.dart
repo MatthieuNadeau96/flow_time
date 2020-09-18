@@ -42,9 +42,6 @@ class _FlowScreenState extends State<FlowScreen>
   Animation degOneTranslationAnimation;
 
   int _counter;
-  int _flowDuration = 5400;
-  int _flowTestTime = 10;
-  int _breakDuration = 1200;
 
   int _coffeeDuration = 100;
   int _coffeeCounter = 100;
@@ -55,7 +52,6 @@ class _FlowScreenState extends State<FlowScreen>
   bool _isPaused = false;
   Timer _timer;
   Timer _coffeeTimer;
-  bool _coffeeIsOn = true;
   bool _waveTimerHeld = false;
   bool _coffeeTimerHeld = false;
 

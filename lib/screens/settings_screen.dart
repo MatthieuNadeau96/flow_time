@@ -1,4 +1,6 @@
 import 'package:flow_time/providers/settings_provider.dart';
+import 'package:flow_time/widgets/settings_number_item.dart';
+import 'package:flow_time/widgets/settings_switch_item.dart';
 import 'package:flutter/material.dart';
 import 'package:numberpicker/numberpicker.dart';
 import 'package:provider/provider.dart';
@@ -20,8 +22,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
 
   @override
   Widget build(BuildContext context) {
+    var theme = Theme.of(context);
     return Consumer<SettingsProvider>(
       builder: (context, settingsProvider, child) {
+        bool dark = settingsProvider.getDarkTheme;
         return Scaffold(
           appBar: AppBar(
               backgroundColor: Theme.of(context).canvasColor,
@@ -46,197 +50,69 @@ class _SettingsScreenState extends State<SettingsScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        'Flow Duration',
-                        style: Theme.of(context).textTheme.bodyText2.copyWith(
-                              fontSize: 18,
-                            ),
-                      ),
-                      SizedBox(
-                        height: 50,
-                        width: 60,
-                        child: GestureDetector(
-                          child: Center(
-                            child: Text(
-                              '${settingsProvider.getFlowDuration} min',
-                              style: TextStyle(
-                                color: Theme.of(context).primaryColor,
-                                fontSize: 16,
-                              ),
-                            ),
-                          ),
-                          onTap: () => _showDialog('Flow'),
-                        ),
-                      )
-                    ],
+                  SettingsNumberItem(
+                    title: 'Flow Duration',
+                    numberText: '${settingsProvider.getFlowDuration} min',
+                    color: dark ? theme.accentColor : theme.primaryColor,
+                    onTap: () => _showDialog('Flow'),
                   ),
-                  // SizedBox(height: 15),
-                  Divider(
-                    color: Theme.of(context).iconTheme.color,
-                    thickness: 1,
+                  SettingsNumberItem(
+                    title: 'Break Duration',
+                    numberText: '${settingsProvider.getBreakDuration} min',
+                    color: dark ? theme.accentColor : theme.primaryColor,
+                    onTap: () => _showDialog('Break'),
                   ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        'Break Duration',
-                        style: Theme.of(context).textTheme.bodyText2.copyWith(
-                              fontSize: 18,
-                            ),
-                      ),
-                      SizedBox(
-                        height: 50,
-                        width: 60,
-                        child: GestureDetector(
-                          child: Center(
-                            child: Text(
-                              '${settingsProvider.getBreakDuration} min',
-                              style: TextStyle(
-                                color: Theme.of(context).primaryColor,
-                                fontSize: 16,
-                              ),
-                            ),
-                          ),
-                          onTap: () => _showDialog('Break'),
-                        ),
-                      )
-                    ],
+                  SettingsSwitchItem(
+                    title: 'Notifications',
+                    value: settingsProvider.getNotifications,
+                    onChange: (newValue) {
+                      setState(() {
+                        SettingsProvider settingsProvider =
+                            Provider.of<SettingsProvider>(context,
+                                listen: false);
+                        settingsProvider.swapNotifications();
+                      });
+                    },
+                    color: dark ? theme.accentColor : theme.primaryColor,
                   ),
-                  // SizedBox(height: 15),
-                  Divider(
-                    color: Theme.of(context).iconTheme.color,
-                    thickness: 1,
+                  SettingsSwitchItem(
+                    title: 'Sound',
+                    value: settingsProvider.getSound,
+                    onChange: (newValue) {
+                      setState(() {
+                        SettingsProvider settingsProvider =
+                            Provider.of<SettingsProvider>(context,
+                                listen: false);
+                        settingsProvider.swapSound();
+                      });
+                    },
+                    color: dark ? theme.accentColor : theme.primaryColor,
                   ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        'Notifications',
-                        style: Theme.of(context).textTheme.bodyText2.copyWith(
-                              fontSize: 18,
-                            ),
-                      ),
-                      SizedBox(
-                        height: 50,
-                        width: 60,
-                        child: Switch(
-                          activeColor: Theme.of(context).primaryColor,
-                          value: settingsProvider.getNotifications,
-                          onChanged: (newValue) {
-                            setState(() {
-                              SettingsProvider settingsProvider =
-                                  Provider.of<SettingsProvider>(context,
-                                      listen: false);
-                              settingsProvider.swapNotifications();
-                            });
-                          },
-                        ),
-                      )
-                    ],
+                  SettingsSwitchItem(
+                    title: 'Coffee Timer',
+                    value: settingsProvider.getCoffee,
+                    onChange: (newValue) {
+                      setState(() {
+                        SettingsProvider settingsProvider =
+                            Provider.of<SettingsProvider>(context,
+                                listen: false);
+                        settingsProvider.swapCoffee();
+                      });
+                    },
+                    color: dark ? theme.accentColor : theme.primaryColor,
                   ),
-                  // SizedBox(height: 15),
-                  Divider(
-                    color: Theme.of(context).iconTheme.color,
-                    thickness: 1,
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        'Sound',
-                        style: Theme.of(context).textTheme.bodyText2.copyWith(
-                              fontSize: 18,
-                            ),
-                      ),
-                      SizedBox(
-                        height: 50,
-                        width: 60,
-                        child: Switch(
-                          activeColor: Theme.of(context).primaryColor,
-                          value: settingsProvider.getSound,
-                          onChanged: (newValue) {
-                            setState(() {
-                              SettingsProvider settingsProvider =
-                                  Provider.of<SettingsProvider>(context,
-                                      listen: false);
-                              settingsProvider.swapSound();
-                            });
-                          },
-                        ),
-                      )
-                    ],
-                  ),
-                  // SizedBox(height: 15),
-                  Divider(
-                    color: Theme.of(context).iconTheme.color,
-                    thickness: 1,
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        'Coffee Timer',
-                        style: Theme.of(context).textTheme.bodyText2.copyWith(
-                              fontSize: 18,
-                            ),
-                      ),
-                      SizedBox(
-                        height: 50,
-                        width: 60,
-                        child: Switch(
-                          activeColor: Theme.of(context).primaryColor,
-                          value: settingsProvider.getCoffee,
-                          onChanged: (newValue) {
-                            setState(() {
-                              SettingsProvider settingsProvider =
-                                  Provider.of<SettingsProvider>(context,
-                                      listen: false);
-                              settingsProvider.swapCoffee();
-                            });
-                          },
-                        ),
-                      )
-                    ],
-                  ),
-                  // SizedBox(height: 15),
-                  Divider(
-                    color: Theme.of(context).iconTheme.color,
-                    thickness: 1,
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        'Dark Theme',
-                        style: Theme.of(context).textTheme.bodyText2.copyWith(
-                              fontSize: 18,
-                            ),
-                      ),
-                      SizedBox(
-                        height: 50,
-                        width: 60,
-                        child: Switch(
-                          activeColor: Theme.of(context).primaryColor,
-                          value: settingsProvider.getDarkTheme,
-                          onChanged: (newValue) {
-                            setState(() {
-                              SettingsProvider settingsProvider =
-                                  Provider.of<SettingsProvider>(context,
-                                      listen: false);
-                              settingsProvider.swapDarkTheme();
-                            });
-                          },
-                        ),
-                      )
-                    ],
-                  ),
-                  // SizedBox(height: 15),
-                  Divider(
-                    color: Theme.of(context).iconTheme.color,
-                    thickness: 1,
+                  SettingsSwitchItem(
+                    title: 'Dark Theme',
+                    value: settingsProvider.getDarkTheme,
+                    onChange: (newValue) {
+                      setState(() {
+                        SettingsProvider settingsProvider =
+                            Provider.of<SettingsProvider>(context,
+                                listen: false);
+                        settingsProvider.swapDarkTheme();
+                      });
+                    },
+                    color: dark ? theme.accentColor : theme.primaryColor,
                   ),
                 ],
               ),
@@ -249,7 +125,6 @@ class _SettingsScreenState extends State<SettingsScreen> {
 
   _showDialog(String text) async {
     bool isFlow = text == 'Flow';
-    final theme = Theme.of(context);
 
     await showDialog<int>(
       context: context,
