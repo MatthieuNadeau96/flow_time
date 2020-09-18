@@ -216,34 +216,42 @@ class _RootPageState extends State<RootPage> {
       radius: markRect.longestSide * 0.5,
     );
     coachMark.show(
-      targetContext: _coffeeKey.currentContext,
-      markRect: markRect,
-      children: [
-        Container(
-          child: Align(
-            alignment: Alignment.center,
-            child: Text(
-              "Tap on the coffee timer to start and pause",
-              style: TextStyle(
-                fontSize: 20.0,
-                fontStyle: FontStyle.italic,
-                color: Theme.of(context).canvasColor,
+        targetContext: _coffeeKey.currentContext,
+        markRect: markRect,
+        children: [
+          Container(
+            child: Align(
+              alignment: Alignment.center,
+              child: Text(
+                "Single tap on the coffee timer to start it and pause it",
+                style: TextStyle(
+                  fontSize: 20.0,
+                  fontStyle: FontStyle.italic,
+                  color: Theme.of(context).canvasColor,
+                ),
               ),
             ),
           ),
-        ),
-      ],
-      duration: null,
-    );
+        ],
+        duration: null,
+        onClose: () {
+          _bannerAd = createBannerAd()
+            ..load()
+            ..show();
+        });
   }
 
   void startOnBoard() {
-    // fix name
     SettingsProvider settingsProvider =
         Provider.of<SettingsProvider>(context, listen: false);
     if (settingsProvider.getFirstTime) {
       Timer(Duration(seconds: 1), () => showCoachMarkButton());
       settingsProvider.swapFirstTime();
+    }
+    if (!settingsProvider.getFirstTime) {
+      _bannerAd = createBannerAd()
+        ..load()
+        ..show();
     }
   }
 
@@ -253,10 +261,7 @@ class _RootPageState extends State<RootPage> {
   void initState() {
     super.initState();
     FirebaseAdMob.instance.initialize(appId: BannerAd.testAdUnitId);
-    _bannerAd = createBannerAd()
-      ..load()
-      ..show();
-    startOnBoard(); // fix name
+    startOnBoard();
   }
 
   @override
