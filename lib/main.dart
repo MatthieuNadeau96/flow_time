@@ -133,7 +133,7 @@ class _RootPageState extends State<RootPage> {
       adUnitId: InterstitialAd.testAdUnitId,
       targetingInfo: targetingInfo,
       listener: (MobileAdEvent event) {
-        print('InterstitialAd $event');
+        // print('InterstitialAd $event');
       },
     );
   }
