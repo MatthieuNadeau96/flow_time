@@ -130,12 +130,15 @@ class _SettingsScreenState extends State<SettingsScreen> {
       context: context,
       child: Consumer<SettingsProvider>(
         builder: (context, settingsProvider, child) {
+          var theme = Theme.of(context);
+          bool dark = settingsProvider.getDarkTheme;
+
           return AlertDialog(
-            backgroundColor: Theme.of(context).canvasColor,
+            backgroundColor: theme.canvasColor,
             title: Text(
               '$text Duration',
               style: TextStyle(
-                color: Theme.of(context).textTheme.bodyText2.color,
+                color: theme.textTheme.bodyText2.color,
               ),
             ),
             content: NumberPicker.integer(
@@ -163,7 +166,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
               FlatButton(
                 child: Text(
                   'CONFIRM',
-                  style: TextStyle(color: Theme.of(context).primaryColor),
+                  style: TextStyle(
+                    color: dark ? theme.accentColor : theme.primaryColor,
+                  ),
                 ),
                 onPressed: () {
                   Navigator.of(context).pop();
