@@ -148,7 +148,8 @@ class _FlowScreenState extends State<FlowScreen>
     _isPlaying = false;
     _timeForBreak = false;
     _isCoffeePlaying = false;
-    initializationSettingsAndroid = AndroidInitializationSettings('wave_thick');
+    initializationSettingsAndroid =
+        AndroidInitializationSettings('wave_thick_512');
     initializationSettingsIOS = IOSInitializationSettings(
         onDidReceiveLocalNotification: onDidReceiveLocalNotification);
     initializationSettings = InitializationSettings(
