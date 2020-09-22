@@ -24,7 +24,7 @@ Future<void> main() async {
         isSoundOn: prefs.getBool('isSound') ?? true,
         isCoffeeTimerOn: prefs.getBool('isCoffeeTimer') ?? true,
         isDarkThemeOn: prefs.getBool('isDarkTheme') ?? false,
-        isFirstTime: prefs.getBool('isFirstTime') ?? false,
+        isFirstTime: prefs.getBool('isFirstTime') ?? true,
       ),
     ),
   );

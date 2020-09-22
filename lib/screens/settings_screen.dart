@@ -6,6 +6,11 @@ import 'package:numberpicker/numberpicker.dart';
 import 'package:provider/provider.dart';
 
 class SettingsScreen extends StatefulWidget {
+  final Function adHandler;
+  SettingsScreen({
+    this.adHandler,
+  });
+
   @override
   _SettingsScreenState createState() => _SettingsScreenState();
 }
@@ -41,6 +46,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                       .withOpacity(0.75),
                 ),
                 onTap: () {
+                  widget.adHandler();
                   Navigator.pop(context);
                 },
               )),

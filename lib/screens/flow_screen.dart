@@ -249,7 +249,7 @@ class _FlowScreenState extends State<FlowScreen>
             _isPlaying = false;
             _timeForBreak = !_timeForBreak;
             _counter = widget.breakDuration;
-            widget.interstitialAdHandler();
+            if (!_lifeCyclePaused) widget.interstitialAdHandler();
           }
         });
       }
@@ -339,7 +339,8 @@ class _FlowScreenState extends State<FlowScreen>
 
   Route _createRoute() {
     return PageRouteBuilder(
-      pageBuilder: (context, animation, secondaryAnimation) => SettingsScreen(),
+      pageBuilder: (context, animation, secondaryAnimation) =>
+          SettingsScreen(adHandler: widget.interstitialAdHandler),
       transitionsBuilder: (context, animation, secondaryAnimation, child) {
         var begin = Offset(1.0, 0.0);
         var end = Offset.zero;
