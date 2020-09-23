@@ -248,11 +248,11 @@ class _RootPageState extends State<RootPage> {
       Timer(Duration(seconds: 1), () => showCoachMarkButton());
       settingsProvider.swapFirstTime();
     }
-    if (!settingsProvider.getFirstTime) {
-      _bannerAd = createBannerAd()
-        ..load()
-        ..show();
-    }
+    // if (!settingsProvider.getFirstTime) {
+    //   _bannerAd = createBannerAd()
+    //     ..load()
+    //     ..show();
+    // }
   }
 
   ///////////////////////////////////////

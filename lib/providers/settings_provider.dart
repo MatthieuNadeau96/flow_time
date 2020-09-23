@@ -3,10 +3,10 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class SettingsProvider with ChangeNotifier {
   int _flowDuration;
-  int flowDuration = 10; // test // real is -> 5400
+  int flowDuration = 5400;
 
   int _breakDuration;
-  int breakDuration = 20; // test // real is -> 1200
+  int breakDuration = 1200;
 
   bool _notifications;
 

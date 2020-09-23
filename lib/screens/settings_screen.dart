@@ -33,23 +33,24 @@ class _SettingsScreenState extends State<SettingsScreen> {
         bool dark = settingsProvider.getDarkTheme;
         return Scaffold(
           appBar: AppBar(
-              backgroundColor: Theme.of(context).canvasColor,
-              elevation: 0,
-              leading: GestureDetector(
-                child: Icon(
-                  Icons.arrow_back_rounded,
-                  size: 30,
-                  color: Theme.of(context)
-                      .textTheme
-                      .bodyText2
-                      .color
-                      .withOpacity(0.75),
-                ),
-                onTap: () {
-                  widget.adHandler();
-                  Navigator.pop(context);
-                },
-              )),
+            backgroundColor: Theme.of(context).canvasColor,
+            elevation: 0,
+            leading: GestureDetector(
+              child: Icon(
+                Icons.arrow_back_rounded,
+                size: 30,
+                color: Theme.of(context)
+                    .textTheme
+                    .bodyText2
+                    .color
+                    .withOpacity(0.75),
+              ),
+              onTap: () {
+                // widget.adHandler();
+                Navigator.pop(context);
+              },
+            ),
+          ),
           body: SafeArea(
             child: Container(
               margin: const EdgeInsets.symmetric(horizontal: 30),

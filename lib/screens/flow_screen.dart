@@ -43,8 +43,8 @@ class _FlowScreenState extends State<FlowScreen>
 
   int _counter;
 
-  int _coffeeDuration = 100;
-  int _coffeeCounter = 100;
+  int _coffeeDuration = 1200;
+  int _coffeeCounter = 1200;
 
   bool _isPlaying;
   bool _timeForBreak;
@@ -137,7 +137,7 @@ class _FlowScreenState extends State<FlowScreen>
         androidPlatformChannelSpecifics, iOSChannelSpecifics);
 
     await flutterLocalNotificationsPlugin.show(
-        0, 'Coffee Finished', 'Time to refuel?', platformChannelSpecifics,
+        0, 'Your coffee is stale!', 'Time to refuel?', platformChannelSpecifics,
         payload: 'coffee payload');
   }
 
@@ -325,9 +325,14 @@ class _FlowScreenState extends State<FlowScreen>
 
   String formatTime(double time) {
     Duration duration = Duration(seconds: time.round());
-    return [duration.inMinutes, duration.inSeconds]
-        .map((seg) => seg.remainder(60).toString().padLeft(2, '0'))
-        .join(':');
+
+    String twoDigits(int n) => n.toString().padLeft(2, "0");
+    String twoDigitMinutes = twoDigits(duration.inMinutes.remainder(60));
+    String twoDigitSeconds = twoDigits(duration.inSeconds.remainder(60));
+    if (time > 3599) {
+      return "${twoDigits(duration.inHours)}:$twoDigitMinutes:$twoDigitSeconds";
+    }
+    return "$twoDigitMinutes:$twoDigitSeconds";
   }
 
   double doubleConverter(double d, int time) => d / time;
