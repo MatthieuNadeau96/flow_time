@@ -5,6 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:numberpicker/numberpicker.dart';
 import 'package:provider/provider.dart';
 
+import 'help_screen.dart';
+
 class SettingsScreen extends StatefulWidget {
   final Function adHandler;
   SettingsScreen({
@@ -25,6 +27,25 @@ class _SettingsScreenState extends State<SettingsScreen> {
 
   final flowTextController = TextEditingController();
 
+  Route _createRoute() {
+    return PageRouteBuilder(
+      pageBuilder: (context, animation, secondaryAnimation) => HelpScreen(),
+      transitionsBuilder: (context, animation, secondaryAnimation, child) {
+        var begin = Offset(1.0, 0.0);
+        var end = Offset.zero;
+        var curve = Curves.ease;
+
+        var tween =
+            Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+
+        return SlideTransition(
+          position: animation.drive(tween),
+          child: child,
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     var theme = Theme.of(context);
@@ -35,21 +56,49 @@ class _SettingsScreenState extends State<SettingsScreen> {
           appBar: AppBar(
             backgroundColor: Theme.of(context).canvasColor,
             elevation: 0,
-            leading: GestureDetector(
-              child: Icon(
-                Icons.arrow_back_rounded,
-                size: 30,
-                color: Theme.of(context)
-                    .textTheme
-                    .bodyText2
-                    .color
-                    .withOpacity(0.75),
+            leading: Container(
+              width: 56,
+              height: 56,
+              child: GestureDetector(
+                child: Icon(
+                  Icons.arrow_back_rounded,
+                  size: 24,
+                  color: Theme.of(context)
+                      .textTheme
+                      .bodyText2
+                      .color
+                      .withOpacity(0.75),
+                ),
+                onTap: () {
+                  // widget.adHandler();
+                  Navigator.pop(context);
+                },
               ),
-              onTap: () {
-                // widget.adHandler();
-                Navigator.pop(context);
-              },
             ),
+            actions: [
+              Container(
+                width: 56,
+                height: 56,
+                child: Center(
+                  child: GestureDetector(
+                    child: Icon(
+                      Icons.help_outline,
+                      size: 24,
+                      color: Theme.of(context)
+                          .textTheme
+                          .bodyText2
+                          .color
+                          .withOpacity(0.75),
+                    ),
+                    onTap: () {
+                      // widget.adHandler();
+
+                      Navigator.of(context).push(_createRoute());
+                    },
+                  ),
+                ),
+              ),
+            ],
           ),
           body: SafeArea(
             child: Container(
