@@ -410,18 +410,33 @@ class _FlowScreenState extends State<FlowScreen>
                       ),
                       if (_waveTimerHeld)
                         Positioned.fill(
-                          child: Align(
-                            alignment: Alignment.center,
-                            child: Text(
-                              formatTime(_counter.toDouble()),
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .headline3
-                                  .copyWith(
-                                    fontWeight: FontWeight.w700,
-                                    color: Theme.of(context).primaryColorLight,
-                                  ),
-                            ),
+                          child: Stack(
+                            // mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Align(
+                                alignment: Alignment.center,
+                                child: Text(
+                                  formatTime(_counter.toDouble()),
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .headline3
+                                      .copyWith(
+                                        fontWeight: FontWeight.w700,
+                                        color:
+                                            Theme.of(context).primaryColorLight,
+                                      ),
+                                ),
+                              ),
+                              Align(
+                                heightFactor: 6.5,
+                                alignment: Alignment.bottomCenter,
+                                child: Icon(
+                                  _timeForBreak ? Icons.local_cafe : Icons.work,
+                                  color: Theme.of(context).primaryColorLight,
+                                  size: 30,
+                                ),
+                              ),
+                            ],
                           ),
                         ),
                     ],
