@@ -171,7 +171,7 @@ class _FlowScreenState extends State<FlowScreen>
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
-    print(state);
+    // print(state);
     setState(() {
       state == AppLifecycleState.paused
           ? _lifeCyclePaused = true
@@ -188,7 +188,7 @@ class _FlowScreenState extends State<FlowScreen>
 
   Future onSelectNotification(String payload) async {
     if (payload != null) {
-      debugPrint('Notification payload: $payload');
+      // debugPrint('Notification payload: $payload');
     }
   }
 
@@ -228,7 +228,7 @@ class _FlowScreenState extends State<FlowScreen>
           ? _counter = widget.breakDuration
           : _counter = widget.flowDuration;
     }
-    print(_counter);
+    // print(_counter);
     setState(() {
       _isPlaying = true;
     });
@@ -281,7 +281,7 @@ class _FlowScreenState extends State<FlowScreen>
   }
 
   void _pauseTimer() {
-    print(_counter);
+    // print(_counter);
     _isPaused = true;
     _timer.cancel();
   }
@@ -316,6 +316,14 @@ class _FlowScreenState extends State<FlowScreen>
           }
         });
       }
+    });
+  }
+
+  void _stopCoffeeTimer() {
+    setState(() {
+      _isCoffeePlaying = false;
+      _coffeeTimer.cancel();
+      _coffeeCounter = 1200;
     });
   }
 
@@ -428,12 +436,12 @@ class _FlowScreenState extends State<FlowScreen>
                                 ),
                               ),
                               Align(
-                                heightFactor: 6.5,
+                                heightFactor: 8,
                                 alignment: Alignment.bottomCenter,
                                 child: Icon(
                                   _timeForBreak ? Icons.local_cafe : Icons.work,
                                   color: Theme.of(context).primaryColorLight,
-                                  size: 30,
+                                  // size: 20,
                                 ),
                               ),
                             ],
@@ -460,6 +468,11 @@ class _FlowScreenState extends State<FlowScreen>
                         setState(() {
                           _coffeeTimerHeld = !_coffeeTimerHeld;
                         });
+                      },
+                      onHorizontalDragEnd: (DragEndDetails details) {
+                        if (details.velocity.pixelsPerSecond.dx > 0) {
+                          _showDialog();
+                        }
                       },
                       child: Stack(
                         children: [
@@ -516,6 +529,32 @@ class _FlowScreenState extends State<FlowScreen>
           ),
         );
       },
+    );
+  }
+
+  _showDialog() {
+    showDialog(
+      context: context,
+      builder: (_) => AlertDialog(
+        title: Text('Reset Coffee Timer'),
+        content: Text('Are you sure?'),
+        actions: [
+          FlatButton(
+            child: Text('No'),
+            onPressed: () {
+              Navigator.pop(context);
+            },
+          ),
+          FlatButton(
+            child: Text('Yes'),
+            onPressed: () {
+              Navigator.pop(context);
+              _stopCoffeeTimer();
+            },
+          ),
+        ],
+        elevation: 24.0,
+      ),
     );
   }
 }
