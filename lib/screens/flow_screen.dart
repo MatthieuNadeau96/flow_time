@@ -372,6 +372,8 @@ class _FlowScreenState extends State<FlowScreen>
 
   @override
   Widget build(BuildContext context) {
+    var deviceSize = MediaQuery.of(context).size;
+    print(deviceSize);
     return Consumer<SettingsProvider>(
       builder: (context, settingsProvider, child) {
         if (_counter == null) {
@@ -394,8 +396,8 @@ class _FlowScreenState extends State<FlowScreen>
                           });
                         },
                         child: Container(
-                          height: 250,
-                          width: 250,
+                          height: deviceSize.width < 350 ? 180 : 250,
+                          width: deviceSize.width < 350 ? 180 : 250,
                           key: GlobalObjectKey('timer'),
                           child: Center(
                             child: WaveTimer(
@@ -450,6 +452,7 @@ class _FlowScreenState extends State<FlowScreen>
                     ],
                   ),
                   Container(
+                    height: deviceSize.width < 350 ? 100 : null,
                     key: GlobalObjectKey('button'),
                     child: RoundActionButton(
                       animation: degOneTranslationAnimation,
@@ -479,8 +482,8 @@ class _FlowScreenState extends State<FlowScreen>
                           Container(
                             key: GlobalObjectKey('coffee'),
                             child: WaveTimer(
-                              height: 64,
-                              width: 64,
+                              height: deviceSize.width < 350 ? 44 : 64,
+                              width: deviceSize.width < 350 ? 44 : 64,
                               color:
                                   Theme.of(context).textTheme.bodyText1.color,
                               foamColor: Colors.brown[300],
@@ -511,7 +514,7 @@ class _FlowScreenState extends State<FlowScreen>
                   GestureDetector(
                     child: Icon(
                       Icons.settings_rounded,
-                      size: 35,
+                      size: deviceSize.width < 350 ? 28 : 35,
                       color: Theme.of(context)
                           .textTheme
                           .bodyText2

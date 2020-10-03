@@ -22,6 +22,7 @@ class RoundActionButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var deviceSize = MediaQuery.of(context).size;
     return Stack(
       children: [
         Transform.translate(
@@ -34,8 +35,8 @@ class RoundActionButton extends StatelessWidget {
             child: Container(
               height: 117,
               child: CircularButton(
-                width: 50,
-                height: 50,
+                width: deviceSize.width < 350 ? 40 : 50,
+                height: deviceSize.width < 350 ? 40 : 50,
                 color: Color(0xff85A6FE).withOpacity(animation.value),
                 icon: Icon(
                   Icons.skip_next,
@@ -56,8 +57,8 @@ class RoundActionButton extends StatelessWidget {
             child: Container(
               height: 117,
               child: CircularButton(
-                width: 50,
-                height: 50,
+                width: deviceSize.width < 350 ? 40 : 50,
+                height: deviceSize.width < 350 ? 40 : 50,
                 color: Color(0xff85A6FE).withOpacity(animation.value),
                 icon: Icon(
                   Icons.stop,
@@ -69,8 +70,8 @@ class RoundActionButton extends StatelessWidget {
           ),
         ),
         CircularButton(
-          width: 117,
-          height: 117,
+          width: deviceSize.width < 350 ? 90 : 117,
+          height: deviceSize.width < 350 ? 90 : 117,
           color: Theme.of(context).accentColor,
           icon: isPlaying
               ? Icon(
