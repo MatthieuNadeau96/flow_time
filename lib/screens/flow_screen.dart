@@ -373,6 +373,7 @@ class _FlowScreenState extends State<FlowScreen>
   @override
   Widget build(BuildContext context) {
     var deviceSize = MediaQuery.of(context).size;
+    bool smallDevice = deviceSize.width < 300;
     print(deviceSize);
     return Consumer<SettingsProvider>(
       builder: (context, settingsProvider, child) {
@@ -396,13 +397,13 @@ class _FlowScreenState extends State<FlowScreen>
                           });
                         },
                         child: Container(
-                          height: deviceSize.width < 350 ? 180 : 250,
-                          width: deviceSize.width < 350 ? 180 : 250,
+                          height: 250,
+                          width: 250,
                           key: GlobalObjectKey('timer'),
                           child: Center(
                             child: WaveTimer(
-                              height: 240,
-                              width: 240,
+                              height: smallDevice ? 180 : 250,
+                              width: smallDevice ? 180 : 250,
                               value: _timeForBreak
                                   ? doubleConverter(
                                       (_counter.toDouble()),
@@ -431,6 +432,7 @@ class _FlowScreenState extends State<FlowScreen>
                                       .textTheme
                                       .headline3
                                       .copyWith(
+                                        fontSize: smallDevice ? 25 : null,
                                         fontWeight: FontWeight.w700,
                                         color:
                                             Theme.of(context).primaryColorLight,
@@ -452,7 +454,7 @@ class _FlowScreenState extends State<FlowScreen>
                     ],
                   ),
                   Container(
-                    height: deviceSize.width < 350 ? 100 : null,
+                    height: smallDevice ? 100 : null,
                     key: GlobalObjectKey('button'),
                     child: RoundActionButton(
                       animation: degOneTranslationAnimation,
@@ -482,8 +484,8 @@ class _FlowScreenState extends State<FlowScreen>
                           Container(
                             key: GlobalObjectKey('coffee'),
                             child: WaveTimer(
-                              height: deviceSize.width < 350 ? 44 : 64,
-                              width: deviceSize.width < 350 ? 44 : 64,
+                              height: smallDevice ? 44 : 64,
+                              width: smallDevice ? 44 : 64,
                               color:
                                   Theme.of(context).textTheme.bodyText1.color,
                               foamColor: Colors.brown[300],
@@ -502,7 +504,7 @@ class _FlowScreenState extends State<FlowScreen>
                                       .headline3
                                       .copyWith(
                                         fontWeight: FontWeight.w700,
-                                        fontSize: 14,
+                                        fontSize: smallDevice ? 10 : 14,
                                         color: Colors.brown[300],
                                       ),
                                 ),
@@ -514,7 +516,7 @@ class _FlowScreenState extends State<FlowScreen>
                   GestureDetector(
                     child: Icon(
                       Icons.settings_rounded,
-                      size: deviceSize.width < 350 ? 28 : 35,
+                      size: smallDevice ? 28 : 35,
                       color: Theme.of(context)
                           .textTheme
                           .bodyText2
