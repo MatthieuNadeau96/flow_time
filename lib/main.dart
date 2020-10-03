@@ -153,14 +153,19 @@ class _RootPageState extends State<RootPage> {
       markRect: markRect,
       children: [
         Container(
-          margin: EdgeInsets.only(bottom: 100),
+          margin: EdgeInsets.only(
+            bottom: 150,
+            left: 30,
+            right: 30,
+          ),
           child: Align(
             alignment: Alignment.center,
             child: Text(
               "Long tap on button to see more options",
+              textAlign: TextAlign.center,
               style: TextStyle(
-                fontSize: 20.0,
-                fontStyle: FontStyle.italic,
+                fontSize: 24.0,
+                fontWeight: FontWeight.bold,
                 color: Theme.of(context).canvasColor,
               ),
             ),
@@ -191,9 +196,10 @@ class _RootPageState extends State<RootPage> {
             alignment: Alignment.center,
             child: Text(
               "Long tap on timers to see time remaining",
+              textAlign: TextAlign.center,
               style: TextStyle(
-                fontSize: 20.0,
-                fontStyle: FontStyle.italic,
+                fontSize: 24.0,
+                fontWeight: FontWeight.bold,
                 color: Theme.of(context).canvasColor,
               ),
             ),
@@ -223,10 +229,11 @@ class _RootPageState extends State<RootPage> {
             child: Align(
               alignment: Alignment.center,
               child: Text(
-                "Single tap on the coffee timer to start it and pause it",
+                "Single tap on the coffee timer to start and pause it. Swipe it to reset.",
+                textAlign: TextAlign.center,
                 style: TextStyle(
-                  fontSize: 20.0,
-                  fontStyle: FontStyle.italic,
+                  fontSize: 24.0,
+                  fontWeight: FontWeight.bold,
                   color: Theme.of(context).canvasColor,
                 ),
               ),
