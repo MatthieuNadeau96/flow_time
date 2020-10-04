@@ -475,9 +475,7 @@ class _FlowScreenState extends State<FlowScreen>
                         });
                       },
                       onHorizontalDragEnd: (DragEndDetails details) {
-                        if (details.velocity.pixelsPerSecond.dx > 0) {
-                          _showDialog();
-                        }
+                        _showDialog();
                       },
                       child: Stack(
                         children: [

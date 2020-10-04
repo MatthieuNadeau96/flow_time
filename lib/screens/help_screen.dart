@@ -32,7 +32,7 @@ class HelpScreen extends StatelessWidget {
               // width: MediaQuery.of(context).size.width,
               child: Center(
                 child: Image(
-                  image: AssetImage('assets/images/onboarding_screenshot.png'),
+                  image: AssetImage('assets/images/hint_image.png'),
                   fit: BoxFit.contain,
                 ),
               ),

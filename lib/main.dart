@@ -195,7 +195,7 @@ class _RootPageState extends State<RootPage> {
           child: Align(
             alignment: Alignment.center,
             child: Text(
-              "Long tap on timers to see time remaining",
+              "Long tap on the timers to see time remaining",
               textAlign: TextAlign.center,
               style: TextStyle(
                 fontSize: 24.0,
