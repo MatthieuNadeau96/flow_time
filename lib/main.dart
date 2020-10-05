@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:firebase_admob/firebase_admob.dart';
+import 'package:flow_time/ad_manager.dart';
 import 'package:flow_time/providers/settings_provider.dart';
 import 'package:flow_time/screens/flow_screen.dart';
 import 'package:flutter/material.dart';
@@ -112,6 +113,11 @@ class _RootPageState extends State<RootPage> {
 
   /////////// Ads ///////////
 
+  Future<void> _initAdMob() {
+    // TODO: Initialize AdMob SDK
+    return FirebaseAdMob.instance.initialize(appId: AdManager.appId);
+  }
+
   static const MobileAdTargetingInfo targetingInfo = MobileAdTargetingInfo(
     testDevices: testDevice != null ? <String>[testDevice] : null,
     nonPersonalizedAds: true,
@@ -119,9 +125,8 @@ class _RootPageState extends State<RootPage> {
 
   BannerAd createBannerAd() {
     return BannerAd(
-      adUnitId: BannerAd.testAdUnitId,
+      adUnitId: AdManager.bannerAdUnitId,
       size: AdSize.banner,
-      targetingInfo: targetingInfo,
       listener: (MobileAdEvent event) {
         // print('BannerAd $event');
       },
@@ -130,7 +135,7 @@ class _RootPageState extends State<RootPage> {
 
   InterstitialAd createInterstitialAd() {
     return InterstitialAd(
-      adUnitId: InterstitialAd.testAdUnitId,
+      adUnitId: AdManager.interstitialAdUnitId,
       targetingInfo: targetingInfo,
       listener: (MobileAdEvent event) {
         // print('InterstitialAd $event');
@@ -267,7 +272,8 @@ class _RootPageState extends State<RootPage> {
   @override
   void initState() {
     super.initState();
-    FirebaseAdMob.instance.initialize(appId: BannerAd.testAdUnitId);
+    FirebaseAdMob.instance.initialize(appId: AdManager.appId);
+
     startOnBoard();
   }
 

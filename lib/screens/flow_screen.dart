@@ -374,7 +374,6 @@ class _FlowScreenState extends State<FlowScreen>
   Widget build(BuildContext context) {
     var deviceSize = MediaQuery.of(context).size;
     bool smallDevice = deviceSize.width < 300;
-    print(deviceSize);
     return Consumer<SettingsProvider>(
       builder: (context, settingsProvider, child) {
         if (_counter == null) {
