@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>364570531802-0pm0gdn5pr3olm229cpjdu14oogjj340.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.364570531802-0pm0gdn5pr3olm229cpjdu14oogjj340</string>
+	<key>API_KEY</key>
+	<string>AIzaSyA2GjXyvg5zFpb8QjOj9ereL9JWOQSm_dc</string>
+	<key>GCM_SENDER_ID</key>
+	<string>364570531802</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.matthieunadeau.flowtime</string>
+	<key>PROJECT_ID</key>
+	<string>flowtime-d97a1</string>
+	<key>STORAGE_BUCKET</key>
+	<string>flowtime-d97a1.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:364570531802:ios:d35e649440996ae96952e3</string>
+	<key>DATABASE_URL</key>
+	<string>https://flowtime-d97a1.firebaseio.com</string>
+</dict>
+</plist>

@@ -24,12 +24,13 @@ dependencies:
     sdk: flutter
   liquid_progress_indicator: ^0.3.2
   flutter_local_notifications: ^1.4.4+4
-  audioplayers: ^0.16.0
+  audioplayers: ^0.16.1
   provider: ^4.3.2+1
   shared_preferences: ^0.5.10
   numberpicker: ^1.2.1
   highlighter_coachmark: ^0.0.3
   firebase_admob: ^0.9.3+4
+  firebase_core: ^0.4.0+9
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.

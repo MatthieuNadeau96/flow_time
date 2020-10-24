@@ -128,7 +128,7 @@ class _RootPageState extends State<RootPage> {
       adUnitId: AdManager.bannerAdUnitId,
       size: AdSize.banner,
       listener: (MobileAdEvent event) {
-        // print('BannerAd $event');
+        print('BannerAd $event');
       },
     );
   }
@@ -138,7 +138,7 @@ class _RootPageState extends State<RootPage> {
       adUnitId: AdManager.interstitialAdUnitId,
       targetingInfo: targetingInfo,
       listener: (MobileAdEvent event) {
-        // print('InterstitialAd $event');
+        print('InterstitialAd $event');
       },
     );
   }
