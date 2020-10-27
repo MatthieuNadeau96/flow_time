@@ -44,6 +44,7 @@ dev_dependencies:
 
 flutter_icons: 
   android: true
+  ios: true
   image_path: "dev_assets/wave_center.png"
   adaptive_icon_background: "#083487"
   adaptive_icon_foreground: "dev_assets/wave_center.png"
